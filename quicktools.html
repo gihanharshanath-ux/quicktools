@@ -1,0 +1,906 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>QuickTools Hub - Free Calculator, Unit Converter, QR Generator & Countdown Timer</title>
+<meta name="description" content="Free online tools: Calculator, Unit Converter, QR Code Generator, and Countdown Timer. Fast, mobile-friendly, no registration required.">
+<style>
+:root{--primary:#2563eb;--primary-dark:#1d4ed8;--bg:#f8fafc;--card:#fff;--text:#1e293b;--muted:#64748b;--border:#e2e8f0;--radius:12px;--shadow:0 4px 6px -1px rgba(0,0,0,.1),0 2px 4px -2px rgba(0,0,0,.1)}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--text);line-height:1.6}
+header{background:var(--card);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100;box-shadow:0 1px 3px rgba(0,0,0,.05)}
+.nav-container{max-width:1200px;margin:0 auto;padding:12px 20px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px}
+.logo{font-size:1.4rem;font-weight:700;color:var(--primary);text-decoration:none}
+nav ul{display:flex;list-style:none;gap:4px;flex-wrap:wrap}
+nav a{color:var(--text);text-decoration:none;padding:8px 12px;border-radius:8px;font-size:.9rem;font-weight:500;transition:background .2s}
+nav a:hover,nav a.active{background:#eff6ff;color:var(--primary)}
+main{max-width:1200px;margin:0 auto;padding:24px 20px 60px;min-height:70vh}
+.page{display:none}
+.page.active{display:block;animation:fadeIn .3s ease}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.hero{text-align:center;padding:40px 20px;margin-bottom:32px}
+.hero h1{font-size:2.2rem;margin-bottom:12px}
+.hero p{color:var(--muted);max-width:600px;margin:0 auto;font-size:1.05rem}
+.tool-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:20px;margin-bottom:40px}
+.tool-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:24px;text-align:center;cursor:pointer;transition:transform .2s,box-shadow .2s}
+.tool-card:hover{transform:translateY(-4px);box-shadow:var(--shadow)}
+.tool-card .icon{font-size:2.5rem;margin-bottom:12px}
+.tool-card h3{margin-bottom:8px}
+.tool-card p{color:var(--muted);font-size:.9rem}
+.panel{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:28px;margin-bottom:24px;box-shadow:var(--shadow)}
+.panel h2{margin-bottom:20px}
+.panel h3{margin:24px 0 12px;font-size:1.1rem}
+.panel p{color:var(--muted);margin-bottom:12px}
+.panel ul{margin-left:20px;color:var(--muted);margin-bottom:12px}
+.panel li{margin-bottom:6px}
+/* Calculator */
+.calc{max-width:360px;margin:0 auto;background:#1e293b;border-radius:16px;padding:20px}
+.calc-display{background:#0f172a;color:#f8fafc;padding:20px;border-radius:10px;text-align:right;font-size:1.8rem;font-weight:600;margin-bottom:16px;min-height:64px;overflow-wrap:break-word;word-break:break-all}
+.calc-buttons{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.calc-buttons button{padding:16px;font-size:1.1rem;border:none;border-radius:10px;background:#334155;color:#f8fafc;cursor:pointer;font-weight:600;transition:background .15s;font-family:inherit}
+.calc-buttons button:hover{background:#475569}
+.calc-buttons .op{background:#f59e0b}
+.calc-buttons .op:hover{background:#d97706}
+.calc-buttons .eq{background:var(--primary)}
+.calc-buttons .eq:hover{background:var(--primary-dark)}
+.calc-buttons .clear{background:#ef4444}
+.calc-buttons .clear:hover{background:#dc2626}
+/* Forms */
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px}
+@media(max-width:600px){.form-row{grid-template-columns:1fr}}
+.form-group label{display:block;margin-bottom:6px;font-weight:500;font-size:.9rem}
+.form-group input,.form-group select,.form-group textarea{width:100%;padding:12px;border:1px solid var(--border);border-radius:8px;font-size:1rem;background:var(--card);color:var(--text);font-family:inherit}
+.form-group input:focus,.form-group select:focus,.form-group textarea:focus{outline:none;border-color:var(--primary);box-shadow:0 0 0 3px rgba(37,99,235,.15)}
+.btn{padding:12px 24px;background:var(--primary);color:#fff;border:none;border-radius:8px;font-size:1rem;font-weight:600;cursor:pointer;transition:background .2s;font-family:inherit}
+.btn:hover{background:var(--primary-dark)}
+.btn-secondary{background:#e2e8f0;color:var(--text)}
+.btn-secondary:hover{background:#cbd5e1}
+.result-box{background:#eff6ff;border:1px solid #bfdbfe;color:var(--primary-dark);padding:16px;border-radius:8px;text-align:center;font-size:1.2rem;font-weight:600;margin-top:16px;min-height:56px;display:flex;align-items:center;justify-content:center}
+/* QR */
+.qr-output{display:flex;flex-direction:column;align-items:center;margin-top:20px;min-height:220px;justify-content:center}
+#qrcode{padding:16px;background:#fff;border-radius:10px;border:1px solid var(--border)}
+#qrcode img,#qrcode canvas{display:block}
+.qr-hint{color:var(--muted);font-size:.9rem;margin-top:12px;text-align:center}
+/* Timer */
+.timer-display{font-size:3rem;font-weight:700;text-align:center;color:var(--primary);font-variant-numeric:tabular-nums;margin:24px 0;font-family:'Courier New',monospace}
+.timer-controls{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+/* Ads */
+.ad-slot{background:#f1f5f9;border:2px dashed #cbd5e1;border-radius:var(--radius);padding:20px;text-align:center;color:var(--muted);font-size:.85rem;margin:24px 0;min-height:100px;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:6px}
+.ad-slot .ad-label{font-weight:600;letter-spacing:1px;text-transform:uppercase;font-size:.7rem}
+/* Blog */
+.blog-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px;margin-top:24px}
+.blog-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;transition:transform .2s,box-shadow .2s;cursor:pointer}
+.blog-card:hover{transform:translateY(-3px);box-shadow:var(--shadow)}
+.blog-card .thumb{height:140px;background:linear-gradient(135deg,#2563eb,#7c3aed);display:flex;align-items:center;justify-content:center;color:#fff;font-size:2.5rem}
+.blog-card .body{padding:18px}
+.blog-card h3{font-size:1.1rem;margin-bottom:8px}
+.blog-card p{color:var(--muted);font-size:.9rem}
+.blog-card .meta{color:var(--muted);font-size:.8rem;margin-top:10px}
+/* Article */
+.article{max-width:800px;margin:0 auto}
+.article h2{margin-bottom:16px}
+.article h3{margin-top:24px;margin-bottom:12px}
+.article p{margin-bottom:14px;color:#334155}
+.article ul,.article ol{margin:12px 0 12px 24px;color:#334155}
+.article li{margin-bottom:6px}
+.article .back-link{display:inline-block;margin-bottom:20px;color:var(--primary);text-decoration:none;font-weight:500}
+.article .back-link:hover{text-decoration:underline}
+/* Footer */
+footer{background:#0f172a;color:#cbd5e1;padding:40px 20px 20px;margin-top:40px}
+.footer-container{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:32px}
+.footer-col h4{color:#fff;margin-bottom:12px;font-size:1rem}
+.footer-col ul{list-style:none}
+.footer-col li{margin-bottom:8px}
+.footer-col a{color:#cbd5e1;text-decoration:none;font-size:.9rem}
+.footer-col a:hover{color:#fff}
+.footer-bottom{max-width:1200px;margin:32px auto 0;padding-top:20px;border-top:1px solid #334155;text-align:center;color:#94a3b8;font-size:.85rem}
+.layout-with-ad{display:grid;grid-template-columns:1fr 300px;gap:24px}
+@media(max-width:900px){.layout-with-ad{grid-template-columns:1fr}.ad-slot{min-height:100px}}
+@media(max-width:700px){nav a{padding:6px 8px;font-size:.8rem}.logo{font-size:1.1rem}.hero h1{font-size:1.6rem}.timer-display{font-size:2rem}.panel{padding:20px}}
+.text-center{text-align:center}
+.mt-2{margin-top:16px}.mt-3{margin-top:24px}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="nav-container">
+    <a href="#home" class="logo" onclick="showPage('home');return false;">⚡ QuickTools</a>
+    <nav>
+      <ul>
+        <li><a href="#home" data-page="home">Home</a></li>
+        <li><a href="#calculator" data-page="calculator">Calculator</a></li>
+        <li><a href="#converter" data-page="converter">Converter</a></li>
+        <li><a href="#qr" data-page="qr">QR Code</a></li>
+        <li><a href="#timer" data-page="timer">Timer</a></li>
+        <li><a href="#blog" data-page="blog">Blog</a></li>
+        <li><a href="#about" data-page="about">About</a></li>
+        <li><a href="#contact" data-page="contact">Contact</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main>
+
+<!-- ===== HOME ===== -->
+<section id="home" class="page active">
+  <div class="hero">
+    <h1>Free Online Tools, Instant Results</h1>
+    <p>Simple, fast, and privacy-friendly tools you can use right in your browser. No sign-up, no downloads, no hassle.</p>
+  </div>
+  <div class="tool-grid">
+    <div class="tool-card" onclick="showPage('calculator')">
+      <div class="icon">🧮</div>
+      <h3>Calculator</h3>
+      <p>Quick basic math with a clean, mobile-friendly interface.</p>
+    </div>
+    <div class="tool-card" onclick="showPage('converter')">
+      <div class="icon">🔄</div>
+      <h3>Unit Converter</h3>
+      <p>Convert length, weight, temperature, area, volume, and more.</p>
+    </div>
+    <div class="tool-card" onclick="showPage('qr')">
+      <div class="icon">📱</div>
+      <h3>QR Code Generator</h3>
+      <p>Create QR codes for links, text, or contact details instantly.</p>
+    </div>
+    <div class="tool-card" onclick="showPage('timer')">
+      <div class="icon">⏱️</div>
+      <h3>Countdown Timer</h3>
+      <p>Set a timer for cooking, workouts, study sessions, and more.</p>
+    </div>
+  </div>
+
+  <div class="ad-slot ad-horizontal">
+    <span class="ad-label">Advertisement</span>
+    <span>Google AdSense ad will appear here</span>
+  </div>
+
+  <div class="panel">
+    <h2>Why Use QuickTools?</h2>
+    <p>QuickTools is built for speed and simplicity. Every tool runs entirely in your browser &mdash; nothing is uploaded to a server, nothing is stored, and there is nothing to sign up for. Whether you need to calculate a tip, convert miles to kilometers, create a QR code for a menu, or set a pomodoro timer, you can get it done in seconds.</p>
+    <p>Our tools are completely free and supported by non-intrusive advertising. We aim to keep the experience clean, fast, and accessible on all devices.</p>
+  </div>
+</section>
+
+<!-- ===== CALCULATOR ===== -->
+<section id="calculator" class="page">
+  <div class="panel">
+    <h2>🧮 Free Online Calculator</h2>
+    <p>A simple, reliable calculator for everyday math. Works on mobile and desktop.</p>
+    <div class="calc">
+      <div class="calc-display" id="calcDisplay">0</div>
+      <div class="calc-buttons">
+        <button class="clear" onclick="calcClear()">AC</button>
+        <button onclick="calcToggleSign()">+/−</button>
+        <button onclick="calcPercent()">%</button>
+        <button class="op" onclick="calcOp('/')">÷</button>
+        <button onclick="calcNum('7')">7</button>
+        <button onclick="calcNum('8')">8</button>
+        <button onclick="calcNum('9')">9</button>
+        <button class="op" onclick="calcOp('*')">×</button>
+        <button onclick="calcNum('4')">4</button>
+        <button onclick="calcNum('5')">5</button>
+        <button onclick="calcNum('6')">6</button>
+        <button class="op" onclick="calcOp('-')">−</button>
+        <button onclick="calcNum('1')">1</button>
+        <button onclick="calcNum('2')">2</button>
+        <button onclick="calcNum('3')">3</button>
+        <button class="op" onclick="calcOp('+')">+</button>
+        <button onclick="calcNum('0')" style="grid-column:span 2">0</button>
+        <button onclick="calcNum('.')">.</button>
+        <button class="eq" onclick="calcEqual()">=</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <h3>How to Use the Calculator</h3>
+    <p>Type numbers using the on-screen keypad. Use the operation buttons (+, −, ×, ÷) to perform arithmetic. The AC button clears everything, +/− flips the sign of the current number, and % divides the current number by 100.</p>
+    <h3>Common Uses</h3>
+    <ul>
+      <li>Calculating shopping totals and discounts</li>
+      <li>Working out tips at restaurants</li>
+      <li>Estimating monthly budgets</li>
+      <li>Quick homework checks</li>
+    </ul>
+    <h3>Frequently Asked Questions</h3>
+    <p><strong>Does the calculator store my history?</strong> No. Everything runs locally in your browser and nothing is saved or sent anywhere.</p>
+    <p><strong>Can I use the keyboard?</strong> Keyboard support is available in most browsers when the calculator panel is active.</p>
+  </div>
+
+  <div class="ad-slot ad-horizontal">
+    <span class="ad-label">Advertisement</span>
+    <span>Google AdSense ad will appear here</span>
+  </div>
+</section>
+
+<!-- ===== CONVERTER ===== -->
+<section id="converter" class="page">
+  <div class="panel">
+    <h2>🔄 Unit Converter</h2>
+    <p>Convert between common units of measurement. Select a category, enter a value, and choose the units.</p>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label for="convCategory">Category</label>
+        <select id="convCategory" onchange="populateUnits()">
+          <option value="length">Length</option>
+          <option value="weight">Weight / Mass</option>
+          <option value="temperature">Temperature</option>
+          <option value="area">Area</option>
+          <option value="volume">Volume</option>
+          <option value="time">Time</option>
+          <option value="speed">Speed</option>
+          <option value="data">Data Storage</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label for="convValue">Value</label>
+        <input type="number" id="convValue" value="1" oninput="doConvert()">
+      </div>
+      <div class="form-group">
+        <label for="convFrom">From</label>
+        <select id="convFrom" onchange="doConvert()"></select>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label for="convTo">To</label>
+        <select id="convTo" onchange="doConvert()"></select>
+      </div>
+    </div>
+    <div class="result-box" id="convResult">Result will appear here</div>
+  </div>
+
+  <div class="panel">
+    <h3>About Unit Conversion</h3>
+    <p>Unit conversion is the process of changing a measurement from one unit to another without changing the underlying quantity. For example, 1 kilometer equals 0.621371 miles, and 1 kilogram equals 2.20462 pounds.</p>
+    <p>This tool supports metric and imperial units for length, weight, temperature, area, volume, time, speed, and data storage. All conversions use standard, internationally recognized conversion factors.</p>
+    <h3>Frequently Asked Questions</h3>
+    <p><strong>Why is temperature conversion different?</strong> Unlike other units, temperature scales have different zero points. That is why we use specific formulas (e.g., °F = °C × 9/5 + 32) rather than a simple multiplier.</p>
+    <p><strong>Are the results rounded?</strong> Results are shown to six significant digits by default. Very large or very small values are shown in scientific notation.</p>
+  </div>
+
+  <div class="ad-slot ad-horizontal">
+    <span class="ad-label">Advertisement</span>
+    <span>Google AdSense ad will appear here</span>
+  </div>
+</section>
+
+<!-- ===== QR CODE ===== -->
+<section id="qr" class="page">
+  <div class="panel">
+    <h2>📱 QR Code Generator</h2>
+    <p>Enter any text or URL to create a QR code. Download it as an image to use on posters, menus, business cards, and more.</p>
+    <div class="form-group">
+      <label for="qrText">Text or URL</label>
+      <input type="text" id="qrText" placeholder="https://example.com" value="https://example.com">
+    </div>
+    <div class="form-row mt-2">
+      <div class="form-group">
+        <label for="qrSize">Size (px)</label>
+        <select id="qrSize">
+          <option value="128">128 x 128</option>
+          <option value="200">200 x 200</option>
+          <option value="256" selected>256 x 256</option>
+          <option value="400">400 x 400</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>&nbsp;</label>
+        <button class="btn" onclick="generateQR()" style="width:100%">Generate QR Code</button>
+      </div>
+    </div>
+    <div class="qr-output">
+      <div id="qrcode"></div>
+      <p class="qr-hint">Enter text above and click Generate.</p>
+    </div>
+    <div class="text-center mt-3">
+      <button class="btn btn-secondary" onclick="downloadQR()">⬇ Download PNG</button>
+    </div>
+  </div>
+
+  <div class="panel">
+    <h3>What Are QR Codes?</h3>
+    <p>QR (Quick Response) codes are two-dimensional barcodes that can be scanned by a smartphone camera to instantly open a website, display text, or connect to Wi-Fi. They were invented in 1994 by Denso Wave and are now used globally in advertising, payments, menus, and event ticketing.</p>
+    <h3>Tips for Using QR Codes</h3>
+    <ul>
+      <li>Test the QR code with a phone before printing it on a large scale.</li>
+      <li>Make sure the printed size is at least 2 x 2 cm for reliable scanning.</li>
+      <li>Avoid placing a QR code on curved or reflective surfaces.</li>
+      <li>Keep good contrast between the code and the background.</li>
+    </ul>
+    <h3>Frequently Asked Questions</h3>
+    <p><strong>Do QR codes expire?</strong> No. The QR code you generate contains data itself, so it will work forever.</p>
+    <p><strong>Is my data uploaded?</strong> No. The QR code is generated entirely in your browser.</p>
+  </div>
+
+  <div class="ad-slot ad-horizontal">
+    <span class="ad-label">Advertisement</span>
+    <span>Google AdSense ad will appear here</span>
+  </div>
+</section>
+
+<!-- ===== TIMER ===== -->
+<section id="timer" class="page">
+  <div class="panel">
+    <h2>⏱️ Countdown Timer</h2>
+    <p>Set a countdown timer in hours, minutes, and seconds. Great for cooking, workouts, study sessions, and productivity.</p>
+    <div class="form-row">
+      <div class="form-group">
+        <label for="timerHours">Hours</label>
+        <input type="number" id="timerHours" min="0" max="23" value="0">
+      </div>
+      <div class="form-group">
+        <label for="timerMinutes">Minutes</label>
+        <input type="number" id="timerMinutes" min="0" max="59" value="5">
+      </div>
+      <div class="form-group">
+        <label for="timerSeconds">Seconds</label>
+        <input type="number" id="timerSeconds" min="0" max="59" value="0">
+      </div>
+    </div>
+    <div class="timer-display" id="timerDisplay">00:05:00</div>
+    <div class="timer-controls">
+      <button class="btn" onclick="startTimer()">▶ Start</button>
+      <button class="btn btn-secondary" onclick="pauseTimer()">⏸ Pause</button>
+      <button class="btn btn-secondary" onclick="resetTimer()">⟳ Reset</button>
+    </div>
+  </div>
+
+  <div class="panel">
+    <h3>How to Use the Countdown Timer</h3>
+    <p>Enter the number of hours, minutes, and seconds you want to count down from, then click <strong>Start</strong>. You can pause and resume at any time, and the Reset button restores the original duration.</p>
+    <h3>Popular Timer Uses</h3>
+    <ul>
+      <li><strong>Pomodoro:</strong> 25 minutes of focused work</li>
+      <li><strong>Cooking:</strong> 10 minutes for boiling eggs</li>
+      <li><strong>Workouts:</strong> 45 seconds of HIIT intervals</li>
+      <li><strong>Meditation:</strong> 5 minutes of mindful breathing</li>
+      <li><strong>Study:</strong> 50-minute deep work sessions</li>
+    </ul>
+    <h3>Frequently Asked Questions</h3>
+    <p><strong>Will the timer keep running if I close the tab?</strong> No, the timer runs in your browser, so keeping the tab open is required.</p>
+    <p><strong>Does it make a sound?</strong> The timer display turns red when finished. You can add custom sounds in a future version.</p>
+  </div>
+
+  <div class="ad-slot ad-horizontal">
+    <span class="ad-label">Advertisement</span>
+    <span>Google AdSense ad will appear here</span>
+  </div>
+</section>
+
+<!-- ===== BLOG ===== -->
+<section id="blog" class="page">
+  <div class="panel">
+    <h2>📚 Blog</h2>
+    <p>Tips, guides, and insights about everyday tools and productivity.</p>
+    <div class="blog-grid">
+      <div class="blog-card" onclick="showPage('article')">
+        <div class="thumb">📏</div>
+        <div class="body">
+          <h3>Common Unit Conversion Mistakes (And How to Avoid Them)</h3>
+          <p>Confusing miles with nautical miles? Mixing up fluid ounces and ounces? Here are the traps to watch for.</p>
+          <div class="meta">5 min read · Guides</div>
+        </div>
+      </div>
+      <div class="blog-card" onclick="showPage('article')">
+        <div class="thumb">📱</div>
+        <div class="body">
+          <h3>How QR Codes Work Behind the Scenes</h3>
+          <p>A quick look at the technology that lets your phone scan a small square to open a website in seconds.</p>
+          <div class="meta">4 min read · Technology</div>
+        </div>
+      </div>
+      <div class="blog-card" onclick="showPage('article')">
+        <div class="thumb">⏱️</div>
+        <div class="body">
+          <h3>The Pomodoro Technique: A Beginner's Guide</h3>
+          <p>Why 25-minute focus sessions beat marathon work sessions — and how to get started today.</p>
+          <div class="meta">6 min read · Productivity</div>
+        </div>
+      </div>
+      <div class="blog-card" onclick="showPage('article')">
+        <div class="thumb">🧮</div>
+        <div class="body">
+          <h3>Everyday Math You Actually Need</h3>
+          <p>From tipping to budgeting, these are the calculations most of us perform every week.</p>
+          <div class="meta">5 min read · Guides</div>
+        </div>
+      </div>
+    </div>
+    <p class="mt-3 text-center" style="color:var(--muted);font-size:.9rem;">
+      <em>Note: For AdSense approval, aim for 15–20 original, detailed articles (800+ words each).</em>
+    </p>
+  </div>
+
+  <div class="ad-slot ad-horizontal">
+    <span class="ad-label">Advertisement</span>
+    <span>Google AdSense ad will appear here</span>
+  </div>
+</section>
+
+<!-- ===== SAMPLE ARTICLE ===== -->
+<section id="article" class="page">
+  <div class="article panel">
+    <a href="#blog" class="back-link" onclick="showPage('blog');return false;">← Back to Blog</a>
+    <h2>Common Unit Conversion Mistakes (And How to Avoid Them)</h2>
+    <p style="color:var(--muted);font-size:.9rem;margin-bottom:20px;">Published: November 2026 · 5 min read · Guides</p>
+
+    <p>Unit conversion is one of the most common calculations people perform, yet it is also one of the most error-prone. A single misplaced decimal point can mean the difference between a successful recipe and a ruined meal — or, in engineering contexts, between a safe structure and a catastrophic failure. In this article, we will look at some of the most common unit conversion mistakes and how to avoid them.</p>
+
+    <h3>1. Confusing Similar-Sounding Units</h3>
+    <p>Fluid ounces and ounces are two completely different measurements. Fluid ounces measure volume (how much space a liquid occupies) while ounces measure mass or weight. One fluid ounce of water weighs about 1.04 ounces, but one fluid ounce of honey weighs about 1.5 ounces. When a recipe says "8 oz of milk," it means fluid ounces; when it says "8 oz of cheese," it means weight.</p>
+
+    <h3>2. Forgetting That Temperature Is Not Linear</h3>
+    <p>Most unit conversions use a simple multiplication factor. Temperature is the exception. Converting Celsius to Fahrenheit requires the formula <em>°F = °C × 9/5 + 32</em>. Because the scales have different starting points, you cannot simply multiply by a factor. Forgetting to add 32 is a classic mistake that leads to dangerously wrong results in cooking and weather forecasting.</p>
+
+    <h3>3. Mixing Metric Prefixes</h3>
+    <p>A kilogram is 1,000 grams. A milligram is 1/1,000 of a gram. When converting between metric units, the prefixes matter enormously. A common mistake is writing "1 mg" when "1 kg" was intended — a thousandfold error. Always double-check that you are using the correct prefix for the scale of your measurement.</p>
+
+    <h3>4. Using the Wrong "Ton"</h3>
+    <p>There are three different tons: the short ton (2,000 lb, used in the US), the long ton (2,240 lb, used in the UK historically), and the metric tonne (1,000 kg, used internationally). If you are converting from tons without checking which system the original figure uses, you can introduce errors of up to 12%.</p>
+
+    <h3>5. Rounding Too Early</h3>
+    <p>When performing multi-step conversions, rounding in the middle can introduce significant errors. For example, converting 1 mile to kilometers gives 1.60934 km. If you round this to 1.6 and then multiply by 10 to find the distance of 10 miles, you get 16 km instead of the correct 16.09 km — a small error, but one that compounds in larger calculations.</p>
+
+    <h3>6. Overlooking Significant Figures</h3>
+    <p>In science and engineering, the number of significant figures in your result should reflect the precision of your inputs. A value of "1.0 km" has two significant figures; "1.00 km" has three. Reporting results with too many digits creates a false impression of precision.</p>
+
+    <h3>How to Avoid These Mistakes</h3>
+    <ul>
+      <li>Always identify the measurement type (volume, mass, temperature, etc.) before converting.</li>
+      <li>Use a reliable converter like the one on this site, which handles the formulas for you.</li>
+      <li>Double-check results against a real-world reference point.</li>
+      <li>Write down your units at every step of a multi-step calculation.</li>
+    </ul>
+
+    <h3>Conclusion</h3>
+    <p>Unit conversion errors are easy to make but also easy to prevent. By understanding what the units actually measure, using the correct formulas, and always double-checking your work, you can convert with confidence. Keep a reliable unit converter bookmarked, and use it to verify your mental math.</p>
+
+    <div class="ad-slot ad-horizontal">
+      <span class="ad-label">Advertisement</span>
+      <span>Google AdSense ad will appear here</span>
+    </div>
+  </div>
+</section>
+
+<!-- ===== ABOUT ===== -->
+<section id="about" class="page">
+  <div class="panel">
+    <h2>About QuickTools Hub</h2>
+    <p>QuickTools Hub is a free collection of small, easy-to-use online tools. It was created to give people simple, fast, and privacy-friendly utilities without ads blocking the tools or requiring users to sign up.</p>
+    <h3>Our Mission</h3>
+    <p>We believe that everyday digital tools should be fast, accessible, and free. Many websites bundle calculators and converters into cluttered pages full of pop-ups and intrusive ads. QuickTools Hub takes a different approach: each tool does one thing well, runs entirely in your browser, and respects your privacy.</p>
+    <h3>How Our Tools Work</h3>
+    <p>All calculations are performed locally in your browser using JavaScript. No data is uploaded to a server, and no data is stored. This means your inputs stay private, and the tools work even when you are offline (after the page has loaded).</p>
+    <h3>What We Offer</h3>
+    <ul>
+      <li><strong>Calculator:</strong> Basic arithmetic with a clean, mobile-friendly design.</li>
+      <li><strong>Unit Converter:</strong> Length, weight, temperature, area, volume, time, speed, and data storage.</li>
+      <li><strong>QR Code Generator:</strong> Create downloadable QR codes for any text or URL.</li>
+      <li><strong>Countdown Timer:</strong> Flexible timers for cooking, workouts, and productivity.</li>
+    </ul>
+    <h3>Contact Us</h3>
+    <p>Have a suggestion for a new tool or feedback on an existing one? We would love to hear from you. Visit our <a href="#contact" onclick="showPage('contact');return false;" style="color:var(--primary);">Contact page</a>.</p>
+  </div>
+</section>
+
+<!-- ===== CONTACT ===== -->
+<section id="contact" class="page">
+  <div class="panel">
+    <h2>Contact Us</h2>
+    <p>We welcome your questions, suggestions, and bug reports. Fill out the form below and we will get back to you as soon as possible.</p>
+    <form onsubmit="handleContact(event)">
+      <div class="form-row">
+        <div class="form-group">
+          <label for="contactName">Your Name</label>
+          <input type="text" id="contactName" required placeholder="John Doe">
+        </div>
+        <div class="form-group">
+          <label for="contactEmail">Your Email</label>
+          <input type="email" id="contactEmail" required placeholder="you@example.com">
+        </div>
+      </div>
+      <div class="form-group" style="margin-bottom:16px;">
+        <label for="contactSubject">Subject</label>
+        <input type="text" id="contactSubject" required placeholder="What is this about?">
+      </div>
+      <div class="form-group" style="margin-bottom:16px;">
+        <label for="contactMessage">Message</label>
+        <textarea id="contactMessage" rows="5" required placeholder="Your message..."></textarea>
+      </div>
+      <button type="submit" class="btn">Send Message</button>
+    </form>
+    <p class="mt-2" style="color:var(--muted);font-size:.9rem;">
+      <em>Note: This form is a demo. To receive messages, connect it to a service like Formspree, EmailJS, or your own backend.</em>
+    </p>
+  </div>
+</section>
+
+<!-- ===== PRIVACY ===== -->
+<section id="privacy" class="page">
+  <div class="article panel">
+    <h2>Privacy Policy</h2>
+    <p><strong>Last updated:</strong> November 2026</p>
+    <p>This Privacy Policy explains how QuickTools Hub ("we", "our", "us") handles your information when you use our website. By using the site, you agree to this policy.</p>
+
+    <h3>1. Information We Do Not Collect</h3>
+    <p>All tools on QuickTools Hub (calculator, converter, QR generator, timer) run entirely in your browser. The values you enter are never transmitted to our servers. We do not require accounts, do not track you across the web, and do not store your inputs.</p>
+
+    <h3>2. Cookies and Similar Technologies</h3>
+    <p>We use minimal cookies for basic site functionality (such as remembering your selected theme, if applicable). Third-party services, such as advertising partners, may set their own cookies.</p>
+
+    <h3>3. Advertising</h3>
+    <p>QuickTools Hub may display ads from Google AdSense and other advertising partners. These partners may use cookies (including the DoubleClick cookie) to serve ads based on your prior visits to this or other websites. You can opt out of personalized advertising by visiting <a href="https://www.google.com/settings/ads" target="_blank" rel="noopener" style="color:var(--primary);">Google's Ads Settings</a> or <a href="https://www.aboutads.info/" target="_blank" rel="noopener" style="color:var(--primary);">www.aboutads.info</a>.</p>
+
+    <h3>4. Third-Party Links</h3>
+    <p>Our site may contain links to external websites. We are not responsible for the content or privacy practices of those sites.</p>
+
+    <h3>5. Children's Privacy</h3>
+    <p>Our site is not directed at children under 13. We do not knowingly collect personal information from children.</p>
+
+    <h3>6. Your Rights</h3>
+    <p>Depending on your location (e.g., EU/EEA, California), you may have rights to access, correct, or delete personal data. Since we do not collect personal data directly, please contact the relevant third-party advertisers to exercise these rights on their platforms.</p>
+
+    <h3>7. Changes to This Policy</h3>
+    <p>We may update this policy from time to time. The "Last updated" date at the top of the page will reflect any changes.</p>
+
+    <h3>8. Contact</h3>
+    <p>If you have questions about this policy, please use the Contact page.</p>
+  </div>
+</section>
+
+<!-- ===== TERMS ===== -->
+<section id="terms" class="page">
+  <div class="article panel">
+    <h2>Terms of Use</h2>
+    <p><strong>Last updated:</strong> November 2026</p>
+    <p>By using QuickTools Hub, you agree to the following terms. If you do not agree, please do not use the site.</p>
+
+    <h3>1. Use of Tools</h3>
+    <p>Our tools are provided free of charge for personal and commercial use. You may use the results of any tool as you see fit, but you are responsible for verifying the accuracy of any calculation or generated content before relying on it.</p>
+
+    <h3>2. No Warranty</h3>
+    <p>The tools are provided "as is" without warranty of any kind. While we make every effort to ensure accuracy, we cannot guarantee that the results are always correct or fit for a particular purpose.</p>
+
+    <h3>3. Limitation of Liability</h3>
+    <p>In no event shall QuickTools Hub be liable for any damages arising from the use or inability to use our tools, including but not limited to data loss, loss of profit, or business interruption.</p>
+
+    <h3>4. Prohibited Uses</h3>
+    <p>You agree not to use our site in any way that is unlawful, harmful, or interferes with the operation of the site. Automated scraping, denial-of-service attacks, and attempts to reverse-engineer the site are prohibited.</p>
+
+    <h3>5. Intellectual Property</h3>
+    <p>The design, code, and content of this site are the property of QuickTools Hub and are protected by copyright. You may not copy, redistribute, or resell our code without permission.</p>
+
+    <h3>6. Third-Party Advertisements</h3>
+    <p>Ads displayed on this site are provided by third parties. We do not endorse the products or services advertised.</p>
+
+    <h3>7. Changes to Terms</h3>
+    <p>We may update these terms at any time. Continued use of the site after changes means you accept the new terms.</p>
+
+    <h3>8. Governing Law</h3>
+    <p>These terms are governed by the laws of the country in which the site owner operates.</p>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="footer-container">
+    <div class="footer-col">
+      <h4>⚡ QuickTools</h4>
+      <p style="font-size:.9rem;color:#94a3b8;">Free online tools that respect your privacy. Built with care.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Tools</h4>
+      <ul>
+        <li><a href="#calculator" onclick="showPage('calculator');return false;">Calculator</a></li>
+        <li><a href="#converter" onclick="showPage('converter');return false;">Unit Converter</a></li>
+        <li><a href="#qr" onclick="showPage('qr');return false;">QR Generator</a></li>
+        <li><a href="#timer" onclick="showPage('timer');return false;">Countdown Timer</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Site</h4>
+      <ul>
+        <li><a href="#about" onclick="showPage('about');return false;">About</a></li>
+        <li><a href="#contact" onclick="showPage('contact');return false;">Contact</a></li>
+        <li><a href="#blog" onclick="showPage('blog');return false;">Blog</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Legal</h4>
+      <ul>
+        <li><a href="#privacy" onclick="showPage('privacy');return false;">Privacy Policy</a></li>
+        <li><a href="#terms" onclick="showPage('terms');return false;">Terms of Use</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    © 2026 QuickTools Hub. All rights reserved. All tools run locally in your browser.
+  </div>
+</footer>
+
+<!-- QR Code library -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
+<script>
+/* ========== NAVIGATION ========== */
+function showPage(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  const page = document.getElementById(id);
+  if (page) page.classList.add('active');
+  document.querySelectorAll('nav a').forEach(a => {
+    a.classList.toggle('active', a.dataset.page === id);
+  });
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+  // Initialize page-specific content
+  if (id === 'converter') populateUnits();
+  if (id === 'qr' && !document.querySelector('#qrcode img, #qrcode canvas')) generateQR();
+  if (id === 'timer') updateTimerDisplay();
+  // Update URL hash
+  history.replaceState(null, '', '#' + id);
+}
+window.addEventListener('DOMContentLoaded', () => {
+  const hash = location.hash.replace('#', '') || 'home';
+  showPage(hash);
+});
+document.querySelectorAll('nav a[data-page]').forEach(a => {
+  a.addEventListener('click', e => { e.preventDefault(); showPage(a.dataset.page); });
+});
+
+/* ========== CALCULATOR ========== */
+let calcCurrent = '0';
+let calcPrevious = '';
+let calcOperation = null;
+let calcResetNext = false;
+
+function updateCalcDisplay() {
+  const el = document.getElementById('calcDisplay');
+  // Format long numbers
+  let val = calcCurrent;
+  if (val.length > 12 && !val.includes('e')) {
+    const num = parseFloat(val);
+    if (!isNaN(num)) val = num.toExponential(6);
+  }
+  el.textContent = val;
+}
+function calcNum(n) {
+  if (calcResetNext) { calcCurrent = '0'; calcResetNext = false; }
+  if (n === '.' && calcCurrent.includes('.')) return;
+  if (calcCurrent === '0' && n !== '.') calcCurrent = n;
+  else calcCurrent += n;
+  updateCalcDisplay();
+}
+function calcOp(op) {
+  if (calcOperation !== null) calcEqual();
+  calcPrevious = calcCurrent;
+  calcOperation = op;
+  calcResetNext = true;
+}
+function calcEqual() {
+  if (calcOperation === null || calcPrevious === '') return;
+  const a = parseFloat(calcPrevious);
+  const b = parseFloat(calcCurrent);
+  let result = 0;
+  switch (calcOperation) {
+    case '+': result = a + b; break;
+    case '-': result = a - b; break;
+    case '*': result = a * b; break;
+    case '/': result = b === 0 ? 'Error' : a / b; break;
+  }
+  calcCurrent = typeof result === 'number' ? String(parseFloat(result.toFixed(10))) : result;
+  calcOperation = null;
+  calcPrevious = '';
+  calcResetNext = true;
+  updateCalcDisplay();
+}
+function calcClear() {
+  calcCurrent = '0'; calcPrevious = ''; calcOperation = null; calcResetNext = false;
+  updateCalcDisplay();
+}
+function calcToggleSign() {
+  if (calcCurrent === '0' || calcCurrent === 'Error') return;
+  calcCurrent = calcCurrent.startsWith('-') ? calcCurrent.slice(1) : '-' + calcCurrent;
+  updateCalcDisplay();
+}
+function calcPercent() {
+  const num = parseFloat(calcCurrent);
+  if (isNaN(num)) return;
+  calcCurrent = String(num / 100);
+  updateCalcDisplay();
+}
+
+/* ========== CONVERTER ========== */
+const unitData = {
+  length: {
+    units: { m: 1, km: 1000, cm: 0.01, mm: 0.001, mi: 1609.344, yd: 0.9144, ft: 0.3048, in: 0.0254, nmi: 1852 },
+    labels: { m: 'Meters (m)', km: 'Kilometers (km)', cm: 'Centimeters (cm)', mm: 'Millimeters (mm)', mi: 'Miles (mi)', yd: 'Yards (yd)', ft: 'Feet (ft)', in: 'Inches (in)', nmi: 'Nautical Miles (nmi)' }
+  },
+  weight: {
+    units: { kg: 1, g: 0.001, mg: 0.000001, t: 1000, lb: 0.453592, oz: 0.0283495, st: 6.35029 },
+    labels: { kg: 'Kilograms (kg)', g: 'Grams (g)', mg: 'Milligrams (mg)', t: 'Metric Tons (t)', lb: 'Pounds (lb)', oz: 'Ounces (oz)', st: 'Stones (st)' }
+  },
+  temperature: { units: { C: 'C', F: 'F', K: 'K' }, labels: { C: 'Celsius (°C)', F: 'Fahrenheit (°F)', K: 'Kelvin (K)' }, special: true },
+  area: {
+    units: { m2: 1, km2: 1e6, cm2: 0.0001, ha: 10000, ac: 4046.86, ft2: 0.092903, in2: 0.00064516, mi2: 2.59e6 },
+    labels: { m2: 'Square Meters', km2: 'Square Kilometers', cm2: 'Square Centimeters', ha: 'Hectares', ac: 'Acres', ft2: 'Square Feet', in2: 'Square Inches', mi2: 'Square Miles' }
+  },
+  volume: {
+    units: { L: 1, mL: 0.001, m3: 1000, gal: 3.78541, qt: 0.946353, pt: 0.473176, cup: 0.236588, floz: 0.0295735, tbsp: 0.0147868, tsp: 0.00492892 },
+    labels: { L: 'Liters (L)', mL: 'Milliliters (mL)', m3: 'Cubic Meters', gal: 'Gallons (US)', qt: 'Quarts (US)', pt: 'Pints (US)', cup: 'Cups (US)', floz: 'Fluid Ounces', tbsp: 'Tablespoons', tsp: 'Teaspoons' }
+  },
+  time: {
+    units: { s: 1, ms: 0.001, min: 60, h: 3600, d: 86400, wk: 604800, mo: 2629800, yr: 31557600 },
+    labels: { s: 'Seconds', ms: 'Milliseconds', min: 'Minutes', h: 'Hours', d: 'Days', wk: 'Weeks', mo: 'Months (avg)', yr: 'Years' }
+  },
+  speed: {
+    units: { ms: 1, kmh: 0.277778, mph: 0.44704, kn: 0.514444, fts: 0.3048 },
+    labels: { ms: 'Meters/second (m/s)', kmh: 'Kilometers/hour (km/h)', mph: 'Miles/hour (mph)', kn: 'Knots', fts: 'Feet/second (ft/s)' }
+  },
+  data: {
+    units: { B: 1, KB: 1024, MB: 1048576, GB: 1073741824, TB: 1099511627776, bit: 0.125 },
+    labels: { B: 'Bytes (B)', KB: 'Kilobytes (KB)', MB: 'Megabytes (MB)', GB: 'Gigabytes (GB)', TB: 'Terabytes (TB)', bit: 'Bits (b)' }
+  }
+};
+
+function populateUnits() {
+  const cat = document.getElementById('convCategory').value;
+  const data = unitData[cat];
+  const fromSel = document.getElementById('convFrom');
+  const toSel = document.getElementById('convTo');
+  const keys = Object.keys(data.units);
+  fromSel.innerHTML = ''; toSel.innerHTML = '';
+  keys.forEach((k, i) => {
+    const optF = new Option(data.labels[k], k, false, i === 0);
+    const optT = new Option(data.labels[k], k, false, i === 1 || (keys.length === 1 && i === 0));
+    fromSel.add(optF); toSel.add(optT);
+  });
+  if (keys.length > 1) toSel.value = keys[1];
+  doConvert();
+}
+
+function doConvert() {
+  const cat = document.getElementById('convCategory').value;
+  const data = unitData[cat];
+  const val = parseFloat(document.getElementById('convValue').value);
+  const from = document.getElementById('convFrom').value;
+  const to = document.getElementById('convTo').value;
+  const resultEl = document.getElementById('convResult');
+  if (isNaN(val)) { resultEl.textContent = 'Enter a valid number'; return; }
+
+  let result;
+  if (data.special && cat === 'temperature') {
+    let celsius;
+    if (from === 'C') celsius = val;
+    else if (from === 'F') celsius = (val - 32) * 5/9;
+    else celsius = val - 273.15;
+    if (to === 'C') result = celsius;
+    else if (to === 'F') result = celsius * 9/5 + 32;
+    else result = celsius + 273.15;
+  } else {
+    result = (val * data.units[from]) / data.units[to];
+  }
+
+  let display;
+  if (Math.abs(result) >= 1e15 || (Math.abs(result) < 1e-6 && result !== 0)) {
+    display = result.toExponential(6);
+  } else {
+    display = parseFloat(result.toPrecision(10)).toString();
+  }
+  resultEl.textContent = `${val} ${data.labels[from].split(' ')[0]} = ${display} ${data.labels[to].split(' ')[0]}`;
+}
+
+/* ========== QR CODE ========== */
+let qrInstance = null;
+function generateQR() {
+  const text = document.getElementById('qrText').value.trim();
+  const size = parseInt(document.getElementById('qrSize').value);
+  const container = document.getElementById('qrcode');
+  container.innerHTML = '';
+  if (!text) {
+    container.innerHTML = '<p style="color:var(--muted);">Enter text or URL above.</p>';
+    return;
+  }
+  if (typeof QRCode === 'undefined') {
+    container.innerHTML = '<p style="color:var(--muted);">QR library loading... please try again.</p>';
+    return;
+  }
+  qrInstance = new QRCode(container, {
+    text: text,
+    width: size,
+    height: size,
+    colorDark: '#0f172a',
+    colorLight: '#ffffff',
+    correctLevel: QRCode.CorrectLevel.M
+  });
+}
+function downloadQR() {
+  const canvas = document.querySelector('#qrcode canvas');
+  const img = document.querySelector('#qrcode img');
+  let dataUrl;
+  if (canvas) dataUrl = canvas.toDataURL('image/png');
+  else if (img) dataUrl = img.src;
+  else { alert('Generate a QR code first.'); return; }
+  const link = document.createElement('a');
+  link.download = 'qr-code.png';
+  link.href = dataUrl;
+  link.click();
+}
+
+/* ========== TIMER ========== */
+let timerInterval = null;
+let timerRemaining = 0;
+let timerRunning = false;
+
+function readTimerInputs() {
+  const h = parseInt(document.getElementById('timerHours').value) || 0;
+  const m = parseInt(document.getElementById('timerMinutes').value) || 0;
+  const s = parseInt(document.getElementById('timerSeconds').value) || 0;
+  return h * 3600 + m * 60 + s;
+}
+function updateTimerDisplay() {
+  const total = timerRunning ? timerRemaining : readTimerInputs();
+  const h = Math.floor(total / 3600);
+  const m = Math.floor((total % 3600) / 60);
+  const s = total % 60;
+  const el = document.getElementById('timerDisplay');
+  el.textContent = `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+  el.style.color = timerRemaining <= 0 && timerRunning === false && total === 0 && timerInterval === null ? '#ef4444' : 'var(--primary)';
+}
+function startTimer() {
+  if (timerRunning) return;
+  if (!timerRunning && timerRemaining === 0) timerRemaining = readTimerInputs();
+  if (timerRemaining <= 0) return;
+  timerRunning = true;
+  timerInterval = setInterval(() => {
+    timerRemaining--;
+    if (timerRemaining <= 0) {
+      clearInterval(timerInterval);
+      timerRunning = false;
+      timerRemaining = 0;
+      document.getElementById('timerDisplay').style.color = '#ef4444';
+      document.getElementById('timerDisplay').textContent = '00:00:00';
+      alert('⏰ Timer finished!');
+      return;
+    }
+    const h = Math.floor(timerRemaining / 3600);
+    const m = Math.floor((timerRemaining % 3600) / 60);
+    const s = timerRemaining % 60;
+    document.getElementById('timerDisplay').textContent = `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+  }, 1000);
+}
+function pauseTimer() {
+  clearInterval(timerInterval);
+  timerRunning = false;
+}
+function resetTimer() {
+  clearInterval(timerInterval);
+  timerRunning = false;
+  timerRemaining = 0;
+  updateTimerDisplay();
+}
+
+/* ========== CONTACT FORM ========== */
+function handleContact(e) {
+  e.preventDefault();
+  alert('Thank you! Your message has been received (demo only — connect to a backend for real submissions).');
+  e.target.reset();
+}
+
+/* ========== LIVE UPDATE TIMER INPUTS ========== */
+['timerHours','timerMinutes','timerSeconds'].forEach(id => {
+  document.addEventListener('DOMContentLoaded', () => {
+    const el = document.getElementById(id);
+    if (el) el.addEventListener('input', () => { if (!timerRunning) updateTimerDisplay(); });
+  });
+});
+</script>
+</body>
+</html>
