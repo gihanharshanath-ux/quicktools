@@ -100,6 +100,40 @@ footer{background:#0f172a;color:#cbd5e1;padding:40px 20px 20px;margin-top:40px}
 @media(max-width:700px){nav a{padding:6px 8px;font-size:.8rem}.logo{font-size:1.1rem}.hero h1{font-size:1.6rem}.timer-display{font-size:2rem}.panel{padding:20px}}
 .text-center{text-align:center}
 .mt-2{margin-top:16px}.mt-3{margin-top:24px}
+  /* Background Remover Styles */
+.drop-zone {
+  border: 2px dashed #cbd5e0; border-radius: 16px;
+  padding: 40px 20px; text-align: center; cursor: pointer;
+  transition: all .2s; background: #f7fafc; display: block;
+}
+.drop-zone:hover, .drop-zone.over { border-color: var(--primary); background: #eff6ff; }
+.drop-zone input { display: none; }
+.previews {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 16px; margin-top: 24px;
+}
+.preview-box {
+  border-radius: 12px; overflow: hidden;
+  background: repeating-conic-gradient(#e2e8f0 0% 25%, #fff 0% 50%) 50% / 20px 20px;
+  aspect-ratio: 1; display: flex; align-items: center;
+  justify-content: center; position: relative; border: 1px solid var(--border);
+}
+.preview-box img { max-width: 100%; max-height: 100%; object-fit: contain; }
+.preview-box .label {
+  position: absolute; top: 8px; left: 8px;
+  background: rgba(0,0,0,.6); color: #fff;
+  padding: 2px 8px; border-radius: 6px; font-size: 11px;
+}
+.actions { display: flex; gap: 12px; margin-top: 24px; }
+.hidden { display: none !important; }
+.spinner {
+  display: inline-block; width: 14px; height: 14px;
+  border: 2px solid #cbd5e0; border-top-color: var(--primary);
+  border-radius: 50%; animation: spin .8s linear infinite;
+  vertical-align: middle; margin-right: 6px;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+@media (max-width: 480px) { .previews { grid-template-columns: 1fr; } }
 </style>
 </head>
 <body>
@@ -114,6 +148,7 @@ footer{background:#0f172a;color:#cbd5e1;padding:40px 20px 20px;margin-top:40px}
         <li><a href="#converter" data-page="converter">Converter</a></li>
         <li><a href="#qr" data-page="qr">QR Code</a></li>
         <li><a href="#timer" data-page="timer">Timer</a></li>
+        <li><a href="#bg-remover" data-page="bg-remover">BG Remover</a></li>
         <li><a href="#blog" data-page="blog">Blog</a></li>
         <li><a href="#about" data-page="about">About</a></li>
         <li><a href="#contact" data-page="contact">Contact</a></li>
@@ -151,6 +186,11 @@ footer{background:#0f172a;color:#cbd5e1;padding:40px 20px 20px;margin-top:40px}
       <h3>Countdown Timer</h3>
       <p>Set a timer for cooking, workouts, study sessions, and more.</p>
     </div>
+     <div class="tool-card" onclick="showPage('bg-remover')">
+   <div class="icon">🎨</div>
+   <h3>Background Remover</h3>
+   <p>Remove the background from any image instantly. 100% private.</p>
+ </div>
   </div>
 
   <div class="ad-slot ad-horizontal">
@@ -374,7 +414,31 @@ footer{background:#0f172a;color:#cbd5e1;padding:40px 20px 20px;margin-top:40px}
     <span>Google AdSense ad will appear here</span>
   </div>
 </section>
+<!-- ===== BACKGROUND REMOVER ===== -->
+<section id="bg-remover" class="page">
+  <div class="panel">
+    <h2>🎨 Background Remover</h2>
+    <p class="sub" style="margin-bottom: 20px;">Everything runs in your browser — your images never leave your device.</p>
 
+    <label class="drop-zone" id="drop">
+      <input type="file" id="file" accept="image/*">
+      <p><strong>Drag &amp; drop an image here</strong></p>
+      <p><small>or click to browse (JPG, PNG, WebP)</small></p>
+    </label>
+
+    <div class="previews hidden" id="previews">
+      <div class="preview-box"><span class="label">Original</span><img id="original"></div>
+      <div class="preview-box"><span class="label">Background removed</span><img id="result"></div>
+    </div>
+
+    <div class="actions hidden" id="actions">
+      <button class="btn btn-secondary" id="reset">Reset</button>
+      <button class="btn" id="download" disabled>Download PNG</button>
+    </div>
+
+    <div class="status" id="status" style="text-align:center; margin-top:16px; font-weight:500;"></div>
+  </div>
+</section>
 <!-- ===== BLOG ===== -->
 <section id="blog" class="page">
   <div class="panel">
@@ -964,6 +1028,83 @@ function handleContact(e) {
     const el = document.getElementById(id);
     if (el) el.addEventListener('input', () => { if (!timerRunning) updateTimerDisplay(); });
   });
+});
+</script>
+  <script type="module">
+import { removeBackground } from 'https://cdn.jsdelivr.net/npm/@imgly/background-removal@1/+esm';
+
+const drop = document.getElementById('drop');
+const fileInput = document.getElementById('file');
+const previews = document.getElementById('previews');
+const actions = document.getElementById('actions');
+const originalImg = document.getElementById('original');
+const resultImg = document.getElementById('result');
+const downloadBtn = document.getElementById('download');
+const resetBtn = document.getElementById('reset');
+const statusEl = document.getElementById('status');
+
+let originalUrl, resultUrl;
+
+['dragenter','dragover'].forEach(e => drop.addEventListener(e, ev => {
+  ev.preventDefault(); drop.classList.add('over');
+}));
+['dragleave','drop'].forEach(e => drop.addEventListener(e, ev => {
+  ev.preventDefault(); drop.classList.remove('over');
+}));
+drop.addEventListener('drop', ev => {
+  const f = ev.dataTransfer.files[0];
+  if (f?.type.startsWith('image/')) handleFile(f);
+});
+fileInput.addEventListener('change', () => {
+  if (fileInput.files[0]) handleFile(fileInput.files[0]);
+});
+
+async function handleFile(file) {
+  if (originalUrl) URL.revokeObjectURL(originalUrl);
+  if (resultUrl) URL.revokeObjectURL(resultUrl);
+  resultUrl = null;
+
+  originalUrl = URL.createObjectURL(file);
+  originalImg.src = originalUrl;
+  resultImg.src = '';
+  previews.classList.remove('hidden');
+  actions.classList.remove('hidden');
+  downloadBtn.disabled = true;
+  drop.classList.add('hidden');
+  statusEl.innerHTML = '<span class="spinner"></span> Downloading AI model on first run (~40MB)...';
+
+  try {
+    const blob = await removeBackground(file, {
+      progress: (key, current, total) => {
+        if (total) statusEl.innerHTML =
+          `<span class="spinner"></span> Processing: ${Math.round(current/total*100)}%`;
+      }
+    });
+    resultUrl = URL.createObjectURL(blob);
+    resultImg.src = resultUrl;
+    downloadBtn.disabled = false;
+    statusEl.textContent = '✅ Done! You can download it now.';
+  } catch (err) {
+    console.error(err);
+    statusEl.textContent = '❌ Error: ' + err.message;
+  }
+}
+
+downloadBtn.addEventListener('click', () => {
+  if (!resultUrl) return;
+  const a = document.createElement('a');
+  a.href = resultUrl; a.download = 'background-removed.png'; a.click();
+});
+
+resetBtn.addEventListener('click', () => {
+  if (originalUrl) URL.revokeObjectURL(originalUrl);
+  if (resultUrl) URL.revokeObjectURL(resultUrl);
+  originalUrl = resultUrl = null;
+  fileInput.value = '';
+  previews.classList.add('hidden');
+  actions.classList.add('hidden');
+  drop.classList.remove('hidden');
+  statusEl.textContent = '';
 });
 </script>
 </body>
