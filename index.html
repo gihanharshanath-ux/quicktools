@@ -138,6 +138,75 @@ footer{background:#0f172a;color:#cbd5e1;padding:40px 20px 20px;margin-top:40px}
 }
 @keyframes spin { to { transform: rotate(360deg); } }
 @media (max-width: 480px) { .previews { grid-template-columns: 1fr; } }
+ /* ---------- Envelope Printer Custom Styles ---------- */
+.env-app-section {
+  display: flex; flex-direction: column;
+  min-height: 700px; height: 80vh; background: #e0e0e0; 
+  margin: -20px -20px 20px -20px; /* Panel padding එකට ගැලපෙන්න */
+  overflow: hidden; border-radius: var(--radius);
+}
+.env-toolbar {
+  background: #f0f0f0; padding: 10px 15px; border-bottom: 1px solid #ccc;
+  display: flex; align-items: center; gap: 10px; font-size: 13px; flex-wrap: wrap; z-index: 10;
+}
+.env-toolbar-group { display: flex; align-items: center; gap: 5px; background: #e8e8e8; padding: 4px 8px; border-radius: 4px; }
+.env-toolbar input[type="number"] { width: 60px; padding: 3px 5px; font-size: 13px; border: 1px solid #ccc; }
+.env-toolbar select { padding: 3px; font-size: 13px; border: 1px solid #ccc; }
+.env-btn {
+  padding: 6px 15px; cursor: pointer; border: 1px solid #999;
+  border-radius: 4px; background: #f0f0f0; font-size: 13px; font-weight: 500;
+}
+.env-btn:hover { background: #e0e0e0; }
+.env-btn-print { background: #90ee90; font-weight: bold; }
+.env-btn-print:hover { background: #7ccd7c; }
+.env-btn-danger { background: #ffcccc; }
+.env-btn-danger:hover { background: #ff9999; }
+
+.env-main-container { display: flex; flex: 1; overflow: hidden; }
+.env-sidebar {
+  width: 320px; background: #f8f8f8; border-right: 1px solid #ccc;
+  padding: 15px; display: flex; flex-direction: column; gap: 10px; overflow-y: auto;
+}
+.env-sidebar label { font-size: 13px; margin-bottom: -5px; font-weight: bold; color: #333; }
+.env-sidebar textarea { width: 100%; height: 100px; resize: none; padding: 8px; font-family: inherit; font-size: 14px; border: 1px solid #ccc; border-radius: 4px; }
+.env-preview-area {
+  flex: 1; background: #808080; padding: 20px;
+  display: flex; flex-direction: column; align-items: center;
+  overflow-y: auto; gap: 20px;
+}
+.env-envelope-wrapper { flex-shrink: 0; overflow: hidden; }
+.env-envelope {
+  background: white; position: relative;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.3); border: 1px solid #999;
+}
+.env-address-box { position: absolute; font-family: serif; line-height: 1.3; color: #000; }
+.env-label { font-weight: bold; margin-bottom: 4px; font-family: sans-serif; font-size: 0.75em; color: #555; }
+.env-address-text { white-space: pre-wrap; }
+.env-registered-mark {
+  position: absolute; top: 5mm; left: 50%; transform: translateX(-50%);
+  padding: 2px 10px; font-size: 11pt; font-weight: bold;
+  display: none; white-space: nowrap; font-family: 'Courier New', Courier, monospace;
+}
+
+@media (max-width: 900px) {
+  .env-main-container { flex-direction: column; }
+  .env-sidebar { width: 100%; border-right: none; border-bottom: 1px solid #ccc; }
+  .env-app-section { height: auto; min-height: 90vh; }
+}
+@media print {
+  body * { visibility: hidden; }
+  .env-preview-area, .env-preview-area * { visibility: visible; }
+  .env-preview-area { position: absolute; left: 0; top: 0; padding: 0; background: white; display: block; }
+  .env-envelope-wrapper {
+    width: auto !important; height: auto !important;
+    overflow: visible !important;
+    page-break-after: always; break-after: page;
+  }
+  .env-envelope-wrapper:last-child { page-break-after: auto; break-after: auto; }
+  .env-envelope {
+    transform: none !important; box-shadow: none !important; border: none !important;
+  }
+}
 </style>
  <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-SY0QCKC60K"></script>
@@ -164,6 +233,7 @@ footer{background:#0f172a;color:#cbd5e1;padding:40px 20px 20px;margin-top:40px}
         <li><a href="#bg-remover" data-page="bg-remover">BG Remover</a></li>
        <li><a href="#password-gen" data-page="password-gen">Password Gen</a></li>
        <li><a href="#bmi-calculator" data-page="bmi-calculator">BMI Calc</a></li>
+       <li><a href="#envelope" data-page="envelope">Envelope Printer</a></li>
         <li><a href="#blog" data-page="blog">Blog</a></li>
         <li><a href="#about" data-page="about">About</a></li>
         <li><a href="#contact" data-page="contact">Contact</a></li>
@@ -215,6 +285,11 @@ footer{background:#0f172a;color:#cbd5e1;padding:40px 20px 20px;margin-top:40px}
    <div class="icon">⚖️</div>
    <h3>BMI Calculator</h3>
    <p>Check your body mass index and health status instantly.</p>
+ </div>
+    <div class="tool-card" onclick="showPage('envelope')">
+   <div class="icon">✉️</div>
+   <h3>Envelope Printer</h3>
+   <p>Print addresses on DL, C5, and C4 envelopes directly.</p>
  </div>
   </div>
 
@@ -509,6 +584,88 @@ footer{background:#0f172a;color:#cbd5e1;padding:40px 20px 20px;margin-top:40px}
       <p style="font-size: 0.9rem; color: var(--muted); margin-top: 10px;">
         <em>Note: BMI is a general guide and does not directly measure body fat or health. Consult a doctor for medical advice.</em>
       </p>
+    </div>
+  </div>
+</section>
+ <!-- ===== ENVELOPE PRINTER ===== -->
+<section id="envelope" class="page">
+  <div class="panel" style="padding: 0; overflow: hidden;">
+    <div class="env-app-section">
+      
+      <!-- Toolbar -->
+      <div class="env-toolbar">
+          <div class="env-toolbar-group">
+              <label>Size:</label>
+              <select id="size-select" onchange="changeSize()">
+                  <option value="DL">DL (110 x 220 mm)</option>
+                  <option value="C5">C5 (162 x 229 mm)</option>
+                  <option value="C4">C4 (229 x 324 mm)</option>
+                  <option value="Custom">Custom</option>
+              </select>
+              <label style="margin-left: 10px;">
+                  <input type="checkbox" id="custom-checkbox" onchange="toggleCustom()"> Custom
+              </label>
+          </div>
+
+          <div class="env-toolbar-group">
+              <label>W:</label>
+              <input type="number" id="env-w" value="220" min="50" oninput="renderEnvelopes()">
+              <label>H:</label>
+              <input type="number" id="env-h" value="110" min="50" oninput="renderEnvelopes()">
+              <span style="font-size: 11px; color: #666;">mm</span>
+          </div>
+
+          <div class="env-toolbar-group">
+              <label style="color: #555;">Sender X/Y:</label>
+              <input type="number" id="sender-x" value="17" min="0" oninput="renderEnvelopes()">
+              <input type="number" id="sender-y" value="45" min="0" oninput="renderEnvelopes()">
+              <label>Size:</label>
+              <input type="number" id="sender-size" value="11" min="6" max="36" oninput="renderEnvelopes()">
+          </div>
+
+          <div class="env-toolbar-group">
+              <label style="color: #555;">Receiver X/Y:</label>
+              <input type="number" id="receiver-x" value="90" min="0" oninput="renderEnvelopes()">
+              <input type="number" id="receiver-y" value="45" min="0" oninput="renderEnvelopes()">
+              <label>Size:</label>
+              <input type="number" id="receiver-size" value="13" min="6" max="36" oninput="renderEnvelopes()">
+          </div>
+
+          <div style="margin-left: auto; display: flex; gap: 8px; flex-wrap: wrap;">
+              <button class="env-btn env-btn-print" onclick="window.print()">🖨️ Print</button>
+              <button class="env-btn env-btn-danger" onclick="clearAll()">Clear</button>
+          </div>
+      </div>
+
+      <!-- Main Content -->
+      <div class="env-main-container">
+          <!-- Sidebar -->
+          <div class="env-sidebar">
+              <label>Sender Address (From):</label>
+              <textarea id="sender-input" placeholder="Type sender address here..." oninput="renderEnvelopes()"></textarea>
+
+              <label>Receiver Address(es) (To):</label>
+              <div style="font-size: 11px; color: #666; margin-top: -5px;">එක පේළියකට එක ලිපිනයක් ලෙස ලියන්න. (එක් එක් පේළිය සඳහා වෙන වෙනම envelope සෑදේ)</div>
+              <textarea id="receiver-input" placeholder="Address 1&#10;Address 2&#10;Address 3..." oninput="renderEnvelopes()"></textarea>
+
+              <div style="margin-top: 8px;">
+                  <input type="file" id="csv-file" accept=".csv,.txt" style="display: none;" onchange="importFile(event)">
+                  <button class="env-btn" style="width: 100%;" onclick="document.getElementById('csv-file').click()">
+                      📥 Import CSV / TXT
+                  </button>
+              </div>
+
+              <div style="display: flex; align-items: center; gap: 5px; font-size: 14px; margin-top: 10px;">
+                  <input type="checkbox" id="reg-post" onchange="renderEnvelopes()">
+                  <label for="reg-post" style="margin-bottom: 0; font-weight: normal;">Registered Post Mark</label>
+              </div>
+          </div>
+
+          <!-- Preview Area -->
+          <div class="env-preview-area" id="preview-container">
+              <!-- Envelopes rendered here -->
+          </div>
+      </div>
     </div>
   </div>
 </section>
@@ -1531,6 +1688,7 @@ function showPage(id) {
   if (id === 'converter') populateUnits();
   if (id === 'qr' && !document.querySelector('#qrcode img, #qrcode canvas')) generateQR();
   if (id === 'timer') updateTimerDisplay();
+ if (id === 'envelope') renderEnvelopes();
   // Update URL hash
   history.replaceState(null, '', '#' + id);
 }
@@ -1947,6 +2105,218 @@ function calculateBMI() {
   resultEl.innerHTML = `Your BMI is <strong>${bmiRounded}</strong> (${category})`;
   resultEl.style.color = color;
 }
+</script>
+ <script>
+    // ==========================================
+    // ENVELOPE PRINTER LOGIC
+    // ==========================================
+    function escapeHtml(text) {
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+    }
+
+    function formatAddress(text) {
+        if (!text) return "";
+        return text.replace(/\s*,\s*/g, ',\n').trim();
+    }
+
+    function updatePrintPageSize(w, h) {
+        let style = document.getElementById('page-size-style');
+        if (!style) {
+            style = document.createElement('style');
+            style.id = 'page-size-style';
+            document.head.appendChild(style);
+        }
+        style.textContent = `@media print { @page { size: ${w}mm ${h}mm; margin: 0; } }`;
+    }
+
+    function renderEnvelopes() {
+        const container = document.getElementById('preview-container');
+        if (!container) return;
+        container.innerHTML = '';
+
+        const senderRaw    = document.getElementById('sender-input').value.trim();
+        const receiverRaw  = document.getElementById('receiver-input').value.trim();
+        const envW         = parseFloat(document.getElementById('env-w').value) || 220;
+        const envH         = parseFloat(document.getElementById('env-h').value) || 110;
+        const senderX      = parseFloat(document.getElementById('sender-x').value) || 0;
+        const senderY      = parseFloat(document.getElementById('sender-y').value) || 0;
+        const receiverX    = parseFloat(document.getElementById('receiver-x').value) || 0;
+        const receiverY    = parseFloat(document.getElementById('receiver-y').value) || 0;
+        const senderSize   = parseFloat(document.getElementById('sender-size').value) || 11;
+        const receiverSize = parseFloat(document.getElementById('receiver-size').value) || 13;
+        const isRegPost    = document.getElementById('reg-post').checked;
+
+        updatePrintPageSize(envW, envH);
+
+        const MM_TO_PX = 96 / 25.4;
+        const envWPx = envW * MM_TO_PX;
+        const envHPx = envH * MM_TO_PX;
+        const containerWidth = container.clientWidth - 40;
+        const maxPreviewWidth = Math.min(850, containerWidth > 100 ? containerWidth : 850);
+        const scale = Math.min(maxPreviewWidth / envWPx, 1);
+
+        const formattedSender = formatAddress(senderRaw);
+        let receiverLines = [];
+        if (receiverRaw) {
+            receiverLines = receiverRaw.split('\n').map(l => l.trim()).filter(l => l);
+        }
+        if (receiverLines.length === 0) receiverLines = [''];
+
+        receiverLines.forEach(line => {
+            const formattedReceiver = formatAddress(line);
+
+            const wrapper = document.createElement('div');
+            wrapper.className = 'env-envelope-wrapper';
+            wrapper.style.width = (envWPx * scale) + 'px';
+            wrapper.style.height = (envHPx * scale) + 'px';
+
+            const envelope = document.createElement('div');
+            envelope.className = 'env-envelope';
+            envelope.style.width = envW + 'mm';
+            envelope.style.height = envH + 'mm';
+            envelope.style.transform = `scale(${scale})`;
+            envelope.style.transformOrigin = 'top left';
+
+            if (isRegPost) {
+                const regMark = document.createElement('div');
+                regMark.className = 'env-registered-mark';
+                regMark.textContent = 'REGISTERED POST';
+                regMark.style.display = 'block';
+                envelope.appendChild(regMark);
+            }
+
+            if (formattedSender) {
+                const senderBox = document.createElement('div');
+                senderBox.className = 'env-address-box';
+                senderBox.style.left = senderX + 'mm';
+                senderBox.style.top = senderY + 'mm';
+                senderBox.style.fontSize = senderSize + 'pt';
+                senderBox.innerHTML = `<div class="env-label">From:</div><div class="env-address-text">${escapeHtml(formattedSender)}</div>`;
+                envelope.appendChild(senderBox);
+            }
+
+            if (formattedReceiver) {
+                const receiverBox = document.createElement('div');
+                receiverBox.className = 'env-address-box';
+                receiverBox.style.left = receiverX + 'mm';
+                receiverBox.style.top = receiverY + 'mm';
+                receiverBox.style.fontSize = receiverSize + 'pt';
+                receiverBox.innerHTML = `<div class="env-label">To:</div><div class="env-address-text">${escapeHtml(formattedReceiver)}</div>`;
+                envelope.appendChild(receiverBox);
+            }
+
+            wrapper.appendChild(envelope);
+            container.appendChild(wrapper);
+        });
+    }
+
+    function changeSize() {
+        let w = 220, h = 110;
+        const sizeSelect = document.getElementById('size-select');
+        const customCheckbox = document.getElementById('custom-checkbox');
+        const envW = document.getElementById('env-w');
+        const envH = document.getElementById('env-h');
+
+        if (sizeSelect.value === 'DL') { w = 220; h = 110; }
+        else if (sizeSelect.value === 'C5') { w = 229; h = 162; }
+        else if (sizeSelect.value === 'C4') { w = 324; h = 229; }
+        else if (sizeSelect.value === 'Custom') {
+            customCheckbox.checked = true;
+            toggleCustom();
+            return;
+        }
+
+        envW.value = w;
+        envH.value = h;
+        customCheckbox.checked = false;
+        toggleCustom();
+        renderEnvelopes();
+    }
+
+    function toggleCustom() {
+        const sizeSelect = document.getElementById('size-select');
+        const customCheckbox = document.getElementById('custom-checkbox');
+        const envW = document.getElementById('env-w');
+        const envH = document.getElementById('env-h');
+
+        if (customCheckbox.checked) {
+            sizeSelect.value = 'Custom';
+            envW.disabled = false;
+            envH.disabled = false;
+            renderEnvelopes();
+        } else {
+            if (sizeSelect.value === 'Custom') sizeSelect.value = 'DL';
+            envW.disabled = true;
+            envH.disabled = true;
+            changeSize();
+        }
+    }
+
+    function parseCSV(text) {
+        const rows = [];
+        let row = [], field = '', inQuotes = false;
+        for (let i = 0; i < text.length; i++) {
+            const c = text[i];
+            if (inQuotes) {
+                if (c === '"' && text[i + 1] === '"') { field += '"'; i++; }
+                else if (c === '"') inQuotes = false;
+                else field += c;
+            } else {
+                if (c === '"') inQuotes = true;
+                else if (c === ',') { row.push(field); field = ''; }
+                else if (c === '\n' || c === '\r') {
+                    if (c === '\r' && text[i + 1] === '\n') i++;
+                    row.push(field); field = '';
+                    if (row.some(f => f.trim())) rows.push(row);
+                    row = [];
+                } else field += c;
+            }
+        }
+        if (field || row.length) { row.push(field); if (row.some(f => f.trim())) rows.push(row); }
+        return rows;
+    }
+
+    function importFile(event) {
+        const file = event.target.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            const content = e.target.result;
+            let addresses = [];
+
+            if (file.name.toLowerCase().endsWith('.csv')) {
+                const rows = parseCSV(content);
+                addresses = rows.map(row => row.map(f => f.trim()).filter(f => f).join(', '));
+            } else {
+                addresses = content.split(/\r?\n/).map(l => l.trim()).filter(l => l);
+            }
+
+            document.getElementById('receiver-input').value = addresses.join('\n');
+            renderEnvelopes();
+            event.target.value = '';
+        };
+        reader.readAsText(file);
+    }
+
+    function clearAll() {
+        if (!confirm('Clear all addresses and reset settings?')) return;
+        document.getElementById('sender-input').value = '';
+        document.getElementById('receiver-input').value = '';
+        document.getElementById('reg-post').checked = false;
+        renderEnvelopes();
+    }
+
+    let envResizeTimer;
+    window.addEventListener('resize', () => {
+        clearTimeout(envResizeTimer);
+        envResizeTimer = setTimeout(() => {
+            if (document.getElementById('envelope').classList.contains('active')) {
+                renderEnvelopes();
+            }
+        }, 200);
+    });
 </script>
 </body>
 </html>
