@@ -163,6 +163,7 @@ footer{background:#0f172a;color:#cbd5e1;padding:40px 20px 20px;margin-top:40px}
         <li><a href="#timer" data-page="timer">Timer</a></li>
         <li><a href="#bg-remover" data-page="bg-remover">BG Remover</a></li>
        <li><a href="#password-gen" data-page="password-gen">Password Gen</a></li>
+       <li><a href="#bmi-calculator" data-page="bmi-calculator">BMI Calc</a></li>
         <li><a href="#blog" data-page="blog">Blog</a></li>
         <li><a href="#about" data-page="about">About</a></li>
         <li><a href="#contact" data-page="contact">Contact</a></li>
@@ -209,6 +210,11 @@ footer{background:#0f172a;color:#cbd5e1;padding:40px 20px 20px;margin-top:40px}
    <div class="icon">🔐</div>
    <h3>Password Generator</h3>
    <p>Create strong, secure passwords instantly.</p>
+ </div>
+    <div class="tool-card" onclick="showPage('bmi-calculator')">
+   <div class="icon">⚖️</div>
+   <h3>BMI Calculator</h3>
+   <p>Check your body mass index and health status instantly.</p>
  </div>
   </div>
 
@@ -468,6 +474,41 @@ footer{background:#0f172a;color:#cbd5e1;padding:40px 20px 20px;margin-top:40px}
     </div>
     <div class="text-center mt-2">
       <button class="btn btn-secondary" onclick="copyPassword()">📋 Copy</button>
+    </div>
+  </div>
+</section>
+ <!-- ===== BMI CALCULATOR ===== -->
+<section id="bmi-calculator" class="page">
+  <div class="panel">
+    <h2>⚖️ BMI Calculator</h2>
+    <p>Calculate your Body Mass Index (BMI) to see if you are at a healthy weight for your height.</p>
+
+    <div class="form-row mt-3">
+      <div class="form-group">
+        <label for="bmiHeight">Height (cm)</label>
+        <input type="number" id="bmiHeight" placeholder="e.g. 175" oninput="calculateBMI()">
+      </div>
+      <div class="form-group">
+        <label for="bmiWeight">Weight (kg)</label>
+        <input type="number" id="bmiWeight" placeholder="e.g. 70" oninput="calculateBMI()">
+      </div>
+    </div>
+
+    <div class="result-box mt-3" id="bmiResult" style="font-size: 1.1rem;">
+      Enter your height and weight to see your BMI.
+    </div>
+
+    <div class="mt-3">
+      <h3>What do the numbers mean?</h3>
+      <ul>
+        <li><strong>Underweight:</strong> Less than 18.5</li>
+        <li><strong>Normal weight:</strong> 18.5 – 24.9</li>
+        <li><strong>Overweight:</strong> 25 – 29.9</li>
+        <li><strong>Obesity:</strong> 30 or greater</li>
+      </ul>
+      <p style="font-size: 0.9rem; color: var(--muted); margin-top: 10px;">
+        <em>Note: BMI is a general guide and does not directly measure body fat or health. Consult a doctor for medical advice.</em>
+      </p>
     </div>
   </div>
 </section>
@@ -1865,6 +1906,46 @@ function copyPassword() {
   navigator.clipboard.writeText(pass).then(() => {
     alert("Password copied to clipboard!");
   });
+}
+</script>
+ <script>
+function calculateBMI() {
+  const heightCm = parseFloat(document.getElementById('bmiHeight').value);
+  const weightKg = parseFloat(document.getElementById('bmiWeight').value);
+  const resultEl = document.getElementById('bmiResult');
+
+  // අගයන් හිස් නම් හෝ 0 නම්
+  if (!heightCm || !weightKg || heightCm <= 0 || weightKg <= 0) {
+    resultEl.innerHTML = "Enter your height and weight to see your BMI.";
+    resultEl.style.color = "var(--primary-dark)";
+    return;
+  }
+
+  // උස මීටර් (meters) වලට හරවන්න
+  const heightM = heightCm / 100;
+  const bmi = weightKg / (heightM * heightM);
+  const bmiRounded = bmi.toFixed(1); // දශමස්ථානයක් දක්වා පමණක් ගන්න
+
+  let category = "";
+  let color = "";
+
+  // BMI අගයට අනුව වර්ණය සහ කාණ්ඩය තීරණය කිරීම
+  if (bmi < 18.5) {
+    category = "Underweight";
+    color = "#3b82f6"; // නිල්
+  } else if (bmi >= 18.5 && bmi <= 24.9) {
+    category = "Normal weight";
+    color = "#10b981"; // කොළ
+  } else if (bmi >= 25 && bmi <= 29.9) {
+    category = "Overweight";
+    color = "#f59e0b"; // තැඹිලි
+  } else {
+    category = "Obesity";
+    color = "#ef4444"; // රතු
+  }
+
+  resultEl.innerHTML = `Your BMI is <strong>${bmiRounded}</strong> (${category})`;
+  resultEl.style.color = color;
 }
 </script>
 </body>
