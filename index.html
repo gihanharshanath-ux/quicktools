@@ -139,10 +139,14 @@ footer{background:#0f172a;color:#cbd5e1;padding:40px 20px 20px;margin-top:40px}
 @keyframes spin { to { transform: rotate(360deg); } }
 @media (max-width: 480px) { .previews { grid-template-columns: 1fr; } }
  /* ---------- Envelope Printer Custom Styles ---------- */
+/* ---------- Envelope Printer Custom Styles ---------- */
 .env-app-section {
   display: flex; flex-direction: column;
-  min-height: 700px; height: 80vh; background: #e0e0e0; 
-  margin: -20px -20px 20px -20px; /* Panel padding එකට ගැලපෙන්න */
+  height: 75vh; min-height: 600px; 
+  background: #e0e0e0; 
+  margin: 0; 
+  width: 100%; 
+  box-sizing: border-box; 
   overflow: hidden; border-radius: var(--radius);
 }
 .env-toolbar {
@@ -162,17 +166,21 @@ footer{background:#0f172a;color:#cbd5e1;padding:40px 20px 20px;margin-top:40px}
 .env-btn-danger { background: #ffcccc; }
 .env-btn-danger:hover { background: #ff9999; }
 
-.env-main-container { display: flex; flex: 1; overflow: hidden; }
+.env-main-container { display: flex; flex: 1; overflow: hidden; min-width: 0; }
+
 .env-sidebar {
+  flex: 0 0 320px; /* මෙතන තමයි වෙනස */
   width: 320px; background: #f8f8f8; border-right: 1px solid #ccc;
   padding: 15px; display: flex; flex-direction: column; gap: 10px; overflow-y: auto;
+  box-sizing: border-box;
 }
 .env-sidebar label { font-size: 13px; margin-bottom: -5px; font-weight: bold; color: #333; }
-.env-sidebar textarea { width: 100%; height: 100px; resize: none; padding: 8px; font-family: inherit; font-size: 14px; border: 1px solid #ccc; border-radius: 4px; }
+.env-sidebar textarea { width: 100%; height: 100px; resize: none; padding: 8px; font-family: inherit; font-size: 14px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
 .env-preview-area {
-  flex: 1; background: #808080; padding: 20px;
+  flex: 1; min-width: 0; background: #808080; padding: 20px;
   display: flex; flex-direction: column; align-items: center;
-  overflow-y: auto; gap: 20px;
+  overflow-y: auto; overflow-x: hidden; gap: 20px;
+  box-sizing: border-box;
 }
 .env-envelope-wrapper { flex-shrink: 0; overflow: hidden; }
 .env-envelope {
