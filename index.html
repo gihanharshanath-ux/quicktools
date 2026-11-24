@@ -162,6 +162,7 @@ footer{background:#0f172a;color:#cbd5e1;padding:40px 20px 20px;margin-top:40px}
         <li><a href="#qr" data-page="qr">QR Code</a></li>
         <li><a href="#timer" data-page="timer">Timer</a></li>
         <li><a href="#bg-remover" data-page="bg-remover">BG Remover</a></li>
+       <li><a href="#password-gen" data-page="password-gen">Password Gen</a></li>
         <li><a href="#blog" data-page="blog">Blog</a></li>
         <li><a href="#about" data-page="about">About</a></li>
         <li><a href="#contact" data-page="contact">Contact</a></li>
@@ -203,6 +204,11 @@ footer{background:#0f172a;color:#cbd5e1;padding:40px 20px 20px;margin-top:40px}
    <div class="icon">🎨</div>
    <h3>Background Remover</h3>
    <p>Remove the background from any image instantly. 100% private.</p>
+ </div>
+    <div class="tool-card" onclick="showPage('password-gen')">
+   <div class="icon">🔐</div>
+   <h3>Password Generator</h3>
+   <p>Create strong, secure passwords instantly.</p>
  </div>
   </div>
 
@@ -425,6 +431,44 @@ footer{background:#0f172a;color:#cbd5e1;padding:40px 20px 20px;margin-top:40px}
   <div class="ad-slot ad-horizontal">
     <span class="ad-label">Advertisement</span>
     <span>Google AdSense ad will appear here</span>
+  </div>
+</section>
+ <!-- ===== PASSWORD GENERATOR ===== -->
+<section id="password-gen" class="page">
+  <div class="panel">
+    <h2>🔐 Password Generator</h2>
+    <p>Create strong, random passwords to keep your accounts secure.</p>
+
+    <div class="form-group mt-3">
+      <label for="passLength">Password Length: <span id="lengthVal">16</span></label>
+      <input type="range" id="passLength" min="8" max="50" value="16" oninput="document.getElementById('lengthVal').innerText = this.value">
+    </div>
+
+    <div class="form-row mt-2">
+      <div class="form-group">
+        <label><input type="checkbox" id="incUpper" checked> Include Uppercase (A-Z)</label>
+      </div>
+      <div class="form-group">
+        <label><input type="checkbox" id="incLower" checked> Include Lowercase (a-z)</label>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label><input type="checkbox" id="incNumbers" checked> Include Numbers (0-9)</label>
+      </div>
+      <div class="form-group">
+        <label><input type="checkbox" id="incSymbols" checked> Include Symbols (!@#$)</label>
+      </div>
+    </div>
+
+    <button class="btn mt-2" style="width:100%" onclick="generatePassword()">Generate Password</button>
+
+    <div class="result-box mt-3" style="font-family:monospace; font-size:1.2rem; letter-spacing:1px; word-break:break-all;" id="passResult">
+      Click Generate
+    </div>
+    <div class="text-center mt-2">
+      <button class="btn btn-secondary" onclick="copyPassword()">📋 Copy</button>
+    </div>
   </div>
 </section>
 <!-- ===== BACKGROUND REMOVER ===== -->
@@ -1780,6 +1824,48 @@ resetBtn.addEventListener('click', () => {
   drop.classList.remove('hidden');
   statusEl.textContent = '';
 });
+</script>
+ <script>
+function generatePassword() {
+  const length = document.getElementById('passLength').value;
+  const incUpper = document.getElementById('incUpper').checked;
+  const incLower = document.getElementById('incLower').checked;
+  const incNumbers = document.getElementById('incNumbers').checked;
+  const incSymbols = document.getElementById('incSymbols').checked;
+
+  const upperChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+  const lowerChars = "abcdefghijklmnopqrstuvwxyz";
+  const numberChars = "0123456789";
+  const symbolChars = "!@#$%^&*()_+~`|}{[]:;?><,./-=";
+
+  let charPool = "";
+  if (incUpper) charPool += upperChars;
+  if (incLower) charPool += lowerChars;
+  if (incNumbers) charPool += numberChars;
+  if (incSymbols) charPool += symbolChars;
+
+  if (charPool === "") {
+    document.getElementById('passResult').innerText = "Please select at least one option!";
+    return;
+  }
+
+  let password = "";
+  for (let i = 0; i < length; i++) {
+    const randomIndex = Math.floor(Math.random() * charPool.length);
+    password += charPool[randomIndex];
+  }
+
+  document.getElementById('passResult').innerText = password;
+}
+
+function copyPassword() {
+  const pass = document.getElementById('passResult').innerText;
+  if (pass === "Click Generate" || pass === "Please select at least one option!") return;
+  
+  navigator.clipboard.writeText(pass).then(() => {
+    alert("Password copied to clipboard!");
+  });
+}
 </script>
 </body>
 </html>
