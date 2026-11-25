@@ -240,6 +240,33 @@ nav a:hover, nav a.active { background: #eff6ff; color: var(--primary); }
     transform: none !important; box-shadow: none !important; border: none !important;
   }
 }
+ /* ---------- Mobile Fixes for Envelope Printer ---------- */
+@media (max-width: 900px) {
+  .env-main-container { 
+    flex-direction: column !important; 
+  }
+  .env-sidebar { 
+    width: 100% !important; 
+    border-right: none !important; 
+    border-bottom: 1px solid #ccc !important; 
+    padding: 10px !important; 
+  }
+  .env-app-section { 
+    height: auto !important; 
+    min-height: 85vh !important; 
+  }
+  .env-toolbar { 
+    flex-wrap: nowrap !important; 
+    overflow-x: auto !important; 
+    padding-bottom: 10px !important; 
+  }
+  .env-toolbar-group { 
+    flex-shrink: 0 !important; 
+  }
+  .env-preview-area { 
+    padding: 10px !important; 
+  }
+}
 </style>
  <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-SY0QCKC60K"></script>
