@@ -297,6 +297,7 @@ nav a:hover, nav a.active { background: #eff6ff; color: var(--primary); }
             <li><a href="#password-gen" data-page="password-gen">Password Gen</a></li>
             <li><a href="#bmi-calculator" data-page="bmi-calculator">BMI Calc</a></li>
             <li><a href="#envelope" data-page="envelope">Envelope Printer</a></li>
+           <li><a href="#age-calculator" data-page="age-calculator">Age Calculator</a></li>
           </ul>
         </li>
         <li><a href="#blog" data-page="blog">Blog</a></li>
@@ -315,6 +316,9 @@ nav a:hover, nav a.active { background: #eff6ff; color: var(--primary); }
     <h1>Free Online Tools, Instant Results</h1>
     <p>Simple, fast, and privacy-friendly tools you can use right in your browser. No sign-up, no downloads, no hassle.</p>
   </div>
+ <div style="max-width: 500px; margin: 0 auto 30px;">
+  <input type="text" id="searchInput" placeholder="🔍 Search for a tool (e.g. Calculator, QR)..." onkeyup="searchTools()" style="width: 100%; padding: 14px 20px; border-radius: 50px; border: 1px solid var(--border); font-size: 1rem; box-shadow: 0 4px 6px rgba(0,0,0,0.05); outline: none; transition: 0.3s;">
+</div>
   <div class="tool-grid">
     <div class="tool-card" onclick="showPage('calculator')">
       <div class="icon">🧮</div>
@@ -356,6 +360,11 @@ nav a:hover, nav a.active { background: #eff6ff; color: var(--primary); }
    <h3>Envelope Printer</h3>
    <p>Print addresses on DL, C5, and C4 envelopes directly.</p>
  </div>
+   <div class="tool-card" onclick="showPage('age-calculator')">
+  <div class="icon">🎂</div>
+  <h3>Age Calculator</h3>
+  <p>Calculate your exact age in years, months, and days.</p>
+</div>
   </div>
 
   <div class="ad-slot ad-horizontal">
@@ -652,6 +661,21 @@ nav a:hover, nav a.active { background: #eff6ff; color: var(--primary); }
     </div>
   </div>
 </section>
+ <!-- ===== AGE CALCULATOR ===== -->
+<section id="age-calculator" class="page">
+  <div class="panel">
+    <h2>🎂 Age Calculator</h2>
+    <p>Enter your date of birth to calculate your exact age.</p>
+    <div class="form-group mt-3">
+      <label for="dob">Date of Birth</label>
+      <input type="date" id="dob" style="width: 100%; padding: 12px; border: 1px solid var(--border); border-radius: 8px;">
+    </div>
+    <button class="btn mt-2" style="width: 100%;" onclick="calculateAge()">Calculate My Age</button>
+    <div class="result-box mt-3" id="ageResult" style="font-size: 1.1rem;">
+      Your age will appear here.
+    </div>
+  </div>
+</section>
  <!-- ===== ENVELOPE PRINTER ===== -->
 <section id="envelope" class="page">
   <div class="panel" style="padding: 0; overflow: hidden;">
@@ -937,7 +961,13 @@ nav a:hover, nav a.active { background: #eff6ff; color: var(--primary); }
       <li>Double-check results against a real-world reference point.</li>
       <li>Write down your units at every step of a multi-step calculation.</li>
     </ul>
-
+<div style="display:flex; align-items:center; gap:15px; margin-top:30px; padding:20px; background:#f8fafc; border-radius:12px; border:1px solid var(--border);">
+  <div style="width:60px; height:60px; background:var(--primary); color:white; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:30px;">👨‍💻</div>
+  <div>
+    <h4 style="margin:0 0 5px 0; color:var(--text);">Written by Gihan</h4>
+    <p style="margin:0; font-size:0.9rem; color:var(--muted); line-height:1.4;">Web Developer & Founder of QuickTools Hub. I build simple, privacy-friendly tools to make your daily tasks easier.</p>
+  </div>
+</div>
     <h3>Conclusion</h3>
     <p>Unit conversion errors are easy to make but also easy to prevent. By understanding what the units actually measure, using the correct formulas, and always double-checking your work, you can convert with confidence. Keep a reliable unit converter bookmarked, and use it to verify your mental math.</p>
 
@@ -2383,5 +2413,44 @@ function calculateBMI() {
         }, 200);
     });
 </script>
+ <script>
+function calculateAge() {
+  const dobValue = document.getElementById('dob').value;
+  const resultEl = document.getElementById('ageResult');
+  if (!dobValue) {
+    resultEl.innerHTML = "Please select your date of birth.";
+    resultEl.style.color = "#ef4444";
+    return;
+  }
+  const dob = new Date(dobValue);
+  const today = new Date();
+  let years = today.getFullYear() - dob.getFullYear();
+  let months = today.getMonth() - dob.getMonth();
+  let days = today.getDate() - dob.getDate();
+  if (days < 0) {
+    months--;
+    days += new Date(today.getFullYear(), today.getMonth(), 0).getDate();
+  }
+  if (months < 0) {
+    years--;
+    months += 12;
+  }
+  resultEl.innerHTML = `You are <strong>${years}</strong> years, <strong>${months}</strong> months, and <strong>${days}</strong> days old.`;
+  resultEl.style.color = "var(--primary-dark)";
+}
+</script>
+ function searchTools() {
+  const input = document.getElementById('searchInput').value.toLowerCase();
+  const cards = document.querySelectorAll('.tool-card');
+  
+  cards.forEach(card => {
+    const text = card.innerText.toLowerCase();
+    if (text.includes(input)) {
+      card.style.display = 'block';
+    } else {
+      card.style.display = 'none';
+    }
+  });
+}
 </body>
 </html>
