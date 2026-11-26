@@ -1,9 +1,36 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>https://gihanharanath-ux.github.io/quicktools/</loc>
-    <lastmod>2026-11-20</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>1.0</priority>
-  </url>
+  <!-- Main Pages -->
+  <url><loc>https://gihanharshanath-ux.github.io/quicktools/</loc><priority>1.0</priority></url>
+  <url><loc>https://gihanharshanath-ux.github.io/quicktools/#blog</loc><priority>0.9</priority></url>
+  <url><loc>https://gihanharshanath-ux.github.io/quicktools/#about</loc><priority>0.5</priority></url>
+  <url><loc>https://gihanharshanath-ux.github.io/quicktools/#contact</loc><priority>0.5</priority></url>
+
+  <!-- Tools -->
+  <url><loc>https://gihanharshanath-ux.github.io/quicktools/#calculator</loc><priority>0.8</priority></url>
+  <url><loc>https://gihanharshanath-ux.github.io/quicktools/#converter</loc><priority>0.8</priority></url>
+  <url><loc>https://gihanharshanath-ux.github.io/quicktools/#qr</loc><priority>0.8</priority></url>
+  <url><loc>https://gihanharshanath-ux.github.io/quicktools/#timer</loc><priority>0.8</priority></url>
+  <url><loc>https://gihanharshanath-ux.github.io/quicktools/#bg-remover</loc><priority>0.8</priority></url>
+  <url><loc>https://gihanharshanath-ux.github.io/quicktools/#password-gen</loc><priority>0.8</priority></url>
+  <url><loc>https://gihanharshanath-ux.github.io/quicktools/#bmi-calculator</loc><priority>0.8</priority></url>
+  <url><loc>https://gihanharshanath-ux.github.io/quicktools/#envelope</loc><priority>0.8</priority></url>
+  <url><loc>https://gihanharshanath-ux.github.io/quicktools/#age-calculator</loc><priority>0.8</priority></url>
+
+  <!-- Blog Articles -->
+  <url><loc>https://gihanharshanath-ux.github.io/quicktools/#article-tip</loc><priority>0.7</priority></url>
+  <url><loc>https://gihanharshanath-ux.github.io/quicktools/#article-qr</loc><priority>0.7</priority></url>
+  <url><loc>https://gihanharshanath-ux.github.io/quicktools/#article-pomodoro</loc><priority>0.7</priority></url>
+  <url><loc>https://gihanharshanath-ux.github.io/quicktools/#article-conversion</loc><priority>0.7</priority></url>
+  <url><loc>https://gihanharshanath-ux.github.io/quicktools/#article-discount</loc><priority>0.7</priority></url>
+  <url><loc>https://gihanharshanath-ux.github.io/quicktools/#article-bg-remover</loc><priority>0.7</priority></url>
+  <url><loc>https://gihanharshanath-ux.github.io/quicktools/#article-data</loc><priority>0.7</priority></url>
+  <url><loc>https://gihanharshanath-ux.github.io/quicktools/#article-temperature</loc><priority>0.7</priority></url>
+  <url><loc>https://gihanharshanath-ux.github.io/quicktools/#article-qr-business</loc><priority>0.7</priority></url>
+  <url><loc>https://gihanharshanath-ux.github.io/quicktools/#article-distance</loc><priority>0.7</priority></url>
+  <url><loc>https://gihanharshanath-ux.github.io/quicktools/#article-timer-mastery</loc><priority>0.7</priority></url>
+  <url><loc>https://gihanharshanath-ux.github.io/quicktools/#article-budget</loc><priority>0.7</priority></url>
+  <url><loc>https://gihanharshanath-ux.github.io/quicktools/#article-cooking</loc><priority>0.7</priority></url>
+  <url><loc>https://gihanharshanath-ux.github.io/quicktools/#article-qr-security</loc><priority>0.7</priority></url>
+  <url><loc>https://gihanharshanath-ux.github.io/quicktools/#article-privacy</loc><priority>0.7</priority></url>
 </urlset>
