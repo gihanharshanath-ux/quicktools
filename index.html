@@ -940,6 +940,15 @@ nav a:hover, nav a.active { background: #eff6ff; color: var(--primary); }
           <p>Discover how our client-side tools keep your personal data safe and secure.</p>
           <div class="meta">4 min read · Privacy</div>
         </div>
+             <!-- Article 16 -->
+      <div class="blog-card" onclick="showPage('article-envelope')">
+        <div class="thumb">✉️</div>
+        <div class="body">
+          <h3>How to Use Our Free Envelope Printer</h3>
+          <p>Stop writing addresses by hand. Learn how to print professional envelopes in minutes.</p>
+          <div class="meta">4 min read · Guides</div>
+        </div>
+      </div>
       </div>
 
     </div> <!-- End of blog-grid -->
@@ -1658,6 +1667,51 @@ nav a:hover, nav a.active { background: #eff6ff; color: var(--primary); }
   </div>
 </section>
 <!-- ===== END OF ARTICLE ===== -->
+ <!-- ===== BLOG ARTICLE: ENVELOPE PRINTER ===== -->
+<section id="article-envelope" class="page">
+  <div class="article panel">
+    <a href="#blog" class="back-link" onclick="showPage('blog');return false;">← Back to Blog</a>
+    <h2>How to Use Our Free Envelope Printer</h2>
+    <p style="color:var(--muted);font-size:.9rem;margin-bottom:20px;">Published: November 2026 · 4 min read · Guides</p>
+
+    <p>Are you tired of writing addresses by hand on dozens of envelopes? Whether you are sending out wedding invitations, business mail, or holiday cards, handwriting can be messy and time-consuming. Our free online Envelope Printer is designed to solve this problem. In this guide, we will show you exactly how to use this tool to print professional-looking envelopes in minutes.</p>
+
+    <h3>Why Use an Envelope Printer?</h3>
+    <p>Printing addresses directly onto envelopes offers several advantages:</p>
+    <ul>
+      <li><strong>Professional Appearance:</strong> Printed addresses look much cleaner and more professional than handwriting.</li>
+      <li><strong>Save Time:</strong> If you have a long mailing list, typing is faster than writing.</li>
+      <li><strong>Avoid Mistakes:</strong> No more smudged ink or misspelled names.</li>
+      <li><strong>Bulk Printing:</strong> You can print multiple envelopes at once using a CSV or text file.</li>
+    </ul>
+
+    <h3>Step-by-Step Guide</h3>
+    <p>Using our Envelope Printer is incredibly simple. Here is how to get started:</p>
+    <ol>
+      <li><strong>Select the Envelope Size:</strong> At the top of the tool, choose your envelope size (DL, C5, C4, or Custom). If you are using a standard Sri Lankan envelope, DL is usually the right choice.</li>
+      <li><strong>Enter the Sender Address:</strong> In the left sidebar, type the "Sender Address" (From). This address will be printed on every envelope you generate.</li>
+      <li><strong>Enter the Receiver Addresses:</strong> Below that, type the "Receiver Address" (To). <em>Important:</em> Type one address per line. Each line will create a separate envelope page.</li>
+      <li><strong>Adjust Positions:</strong> If the addresses look a bit off-center, you can use the X and Y coordinate boxes at the top to move the text left, right, up, or down.</li>
+      <li><strong>Registered Post:</strong> If you need a "REGISTERED POST" mark, simply tick the checkbox in the sidebar.</li>
+      <li><strong>Print:</strong> Click the green "Print" button. <strong>Important:</strong> In your browser's print dialog, set the margins to "None" and the scale to "100%" for perfect alignment.</li>
+    </ol>
+
+    <h3>Can I Import a Mailing List?</h3>
+    <p>Yes! If you have a list of addresses in Excel or a CSV file, you don't need to type them one by one. Click the "Import CSV / TXT" button, select your file, and the tool will automatically generate an envelope for each address in your list.</p>
+
+    <h3>Is It Really Free?</h3>
+    <p>Yes, 100% free. There are no watermarks, no hidden fees, and no sign-ups required. Because the tool runs entirely in your browser, your addresses are never uploaded to our servers, keeping your data completely private.</p>
+
+    <h3>Conclusion</h3>
+    <p>Stop wasting time with pens and address labels. Try our free <a href="#envelope" onclick="showPage('envelope');return false;" style="color:var(--primary); font-weight:bold;">Envelope Printer</a> today and make your mailing tasks easier than ever.</p>
+
+    <div class="ad-slot ad-horizontal">
+      <span class="ad-label">Advertisement</span>
+      <span>Google AdSense ad will appear here</span>
+    </div>
+  </div>
+</section>
+<!-- ===== END OF ARTICLE ===== -->
 <!-- ===== CONTACT ===== -->
 <section id="contact" class="page">
   <div class="panel">
@@ -1848,6 +1902,9 @@ nav a:hover, nav a.active { background: #eff6ff; color: var(--primary); }
     pageDesc = "Enter your date of birth to calculate your exact age in years, months, and days.";
   } else if (id === 'blog') {
     pageTitle = "Blog - Tips, Guides, and Productivity | QuickTools";
+   } else if (id === 'article-envelope') {
+  pageTitle = "How to Use Our Free Envelope Printer | QuickTools";
+  pageDesc = "Stop writing addresses by hand. Learn how to print professional envelopes in minutes with our free tool.";
   } else if (id === 'about') {
     pageTitle = "About Us | QuickTools";
   } else if (id === 'contact') {
