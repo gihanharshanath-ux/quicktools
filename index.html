@@ -8,7 +8,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>QuickTools Hub - Free Calculator, Unit Converter, QR Generator & Countdown Timer</title>
-<meta name="description" content="Free online tools: Calculator, Unit Converter, QR Code Generator, and Countdown Timer. Fast, mobile-friendly, no registration required.">
+<meta id="metaDescription" name="description" content="Free online tools: Calculator, Unit Converter, QR Code Generator, and Countdown Timer. Fast, mobile-friendly, no registration required.">
 <style>
 :root{--primary:#2563eb;--primary-dark:#1d4ed8;--bg:#f8fafc;--card:#fff;--text:#1e293b;--muted:#64748b;--border:#e2e8f0;--radius:12px;--shadow:0 4px 6px -1px rgba(0,0,0,.1),0 2px 4px -2px rgba(0,0,0,.1)}
 *{box-sizing:border-box;margin:0;padding:0}
@@ -1799,7 +1799,6 @@ nav a:hover, nav a.active { background: #eff6ff; color: var(--primary); }
 
 <script>
 /* ========== NAVIGATION ========== */
-function showPage(id) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   const page = document.getElementById(id);
   if (page) page.classList.add('active');
@@ -1807,11 +1806,62 @@ function showPage(id) {
     a.classList.toggle('active', a.dataset.page === id);
   });
   window.scrollTo({ top: 0, behavior: 'smooth' });
+  
   // Initialize page-specific content
   if (id === 'converter') populateUnits();
   if (id === 'qr' && !document.querySelector('#qrcode img, #qrcode canvas')) generateQR();
   if (id === 'timer') updateTimerDisplay();
- if (id === 'envelope') renderEnvelopes();
+  if (id === 'envelope') renderEnvelopes();
+  
+  // SEO TITLE UPDATE
+  let pageTitle = "QuickTools Hub - Free Online Tools";
+  let pageDesc = "Free online tools: Calculator, Unit Converter, QR Code Generator, and Countdown Timer.";
+
+  if (id === 'home') {
+    pageTitle = "QuickTools Hub - Free Calculator, Unit Converter, QR Generator & Timer";
+  } else if (id === 'calculator') {
+    pageTitle = "Free Online Calculator | QuickTools";
+    pageDesc = "A simple, reliable calculator for everyday math. Works on mobile and desktop.";
+  } else if (id === 'converter') {
+    pageTitle = "Unit Converter (Length, Weight, Temperature) | QuickTools";
+    pageDesc = "Convert between common units of measurement. Select a category, enter a value, and choose the units.";
+  } else if (id === 'qr') {
+    pageTitle = "Free QR Code Generator | QuickTools";
+    pageDesc = "Create QR codes for links, text, or contact details instantly. Download as PNG.";
+  } else if (id === 'timer') {
+    pageTitle = "Online Countdown Timer | QuickTools";
+    pageDesc = "Set a countdown timer in hours, minutes, and seconds. Great for cooking, workouts, and study sessions.";
+  } else if (id === 'bg-remover') {
+    pageTitle = "Free Background Remover - 100% Private | QuickTools";
+    pageDesc = "Remove the background from any image instantly. Runs entirely in your browser. No uploads, 100% private.";
+  } else if (id === 'password-gen') {
+    pageTitle = "Strong Password Generator | QuickTools";
+    pageDesc = "Create strong, secure passwords instantly. Choose length and character types.";
+  } else if (id === 'bmi-calculator') {
+    pageTitle = "Free BMI Calculator (Body Mass Index) | QuickTools";
+    pageDesc = "Calculate your Body Mass Index (BMI) to see if you are at a healthy weight for your height.";
+  } else if (id === 'envelope') {
+    pageTitle = "Free Envelope Printer (DL, C5, C4) | QuickTools";
+    pageDesc = "Print sender and receiver addresses on DL, C5, or C4 envelopes directly from your browser.";
+  } else if (id === 'age-calculator') {
+    pageTitle = "Age Calculator - Find Your Exact Age | QuickTools";
+    pageDesc = "Enter your date of birth to calculate your exact age in years, months, and days.";
+  } else if (id === 'blog') {
+    pageTitle = "Blog - Tips, Guides, and Productivity | QuickTools";
+  } else if (id === 'about') {
+    pageTitle = "About Us | QuickTools";
+  } else if (id === 'contact') {
+    pageTitle = "Contact Us | QuickTools";
+  } else if (id.startsWith('article-')) {
+    // ලිපියක් ඕපන් කරද්දි ඒ ලිපියේ මාතෘකාව (H2) ගන්නවා
+    const articleTitle = page.querySelector('h2').innerText;
+    pageTitle = articleTitle + " | QuickTools Blog";
+  }
+
+  document.title = pageTitle;
+  const metaDesc = document.getElementById('metaDescription');
+  if (metaDesc) metaDesc.setAttribute('content', pageDesc);
+
   // Update URL hash
   history.replaceState(null, '', '#' + id);
 }
