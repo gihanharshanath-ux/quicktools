@@ -2958,12 +2958,13 @@ window.addEventListener('resize', () => {
   envResizeTimer = setTimeout(() => { if (document.getElementById('envelope').classList.contains('active')) renderEnvelopes(); }, 200);
 });
 </script>
- <script>
+<script>
 /* ========== NAVIGATION & SEO ========== */
 function showPage(id) {
+  // හැම පිටුවක්ම සඟවන්න
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-  const page = document.getElementById(id);
   
+  const page = document.getElementById(id);
   if (page) {
     page.classList.add('active');
   } else {
